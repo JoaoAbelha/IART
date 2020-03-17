@@ -13,9 +13,10 @@ public abstract class Algorithm {
 
     private int steps;
     private List<Car> cars = new ArrayList<>();
-    private List<Ride> rides;
+    private List<Ride> allRides;
+    private List<Ride> rides; //non assigned rides
     private int[][] state;
-    private int bonus;
+    private int perRideBonus;
 
 
     Algorithm() {}
@@ -26,9 +27,10 @@ public abstract class Algorithm {
             cars.add(new Car());
         }
         this.steps = steps;
-        this.rides = rides;
+        this.rides = new ArrayList<>(rides);
+        this.allRides = rides;
         this.steps = steps;
-        this.bonus = bonus;
+        this.perRideBonus = bonus;
         this.state = new int[nrCars][rides.size()];
         System.out.println("n cars = " + nrCars + "; n rides = " + rides.size());
         System.out.println(this.state[0][0]);
@@ -88,6 +90,7 @@ public abstract class Algorithm {
             state[chosen.id - 1][rideToAssign.id - 1] = 1;
             chosen.addRide(rideToAssign);
             rides.remove(rideToAssign);
+            rideToAssign.assign();
             //System.out.println(chosen.busyUntil);
         }
 
@@ -100,12 +103,22 @@ public abstract class Algorithm {
             System.out.println("----------------------------");
         }
 
-        System.out.println("Not assigned rides:" + rides.size());
+        System.out.println("Not assigned rides: " + rides.size());
+        System.out.println("Total Points: " + evaluate(state));
     }
 
-    int calculatePoints() {
-        /*todo*/
-        return 0;
+    int evaluate(int[][] state) {
+        int points = 0;
+        Ride ride = allRides.get(0);
+        for (int i = 0; i < state.length; i++) {
+            int[] car = state[i];
+            for (int j = 0; j < car.length; j++) {
+                if (car[j] == 1) {
+                    points += allRides.get(j).getDistance();
+                }
+            }
+        }
+        return points;
     }
 
     public abstract void solve();

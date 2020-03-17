@@ -3,7 +3,7 @@ public class Ride {
     private static int idCounter = 1;
     public int id;
 
-    public boolean assigned;
+    private boolean assigned;
 
     private Position start;
     private Position end;
@@ -49,6 +49,18 @@ public class Ride {
     /*distance to the next ride*/
     public int betweenRides(Ride next) {
         return end.getDistanceTo(next.start);
+    }
+
+    public void assign() {
+        assigned = true;
+    }
+
+    public void unassign() {
+        assigned = false;
+    }
+
+    public boolean isAssigned() {
+        return assigned;
     }
 
 

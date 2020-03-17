@@ -90,13 +90,16 @@ public class Menu {
         Writer fileWriter = new FileWriter("output.txt", false);
         int[][] state = problem.getState();
         for (int i = 0; i < state.length; i++) {
-            String carRides = "" + (i + 1);
+            String carRides = "";
             int[] car = state[i];
+            int ridesCounter = 0;
             for (int j = 0; j < car.length; j++) {
-                if (car[j] == 1)
+                if (car[j] == 1) {
                     carRides += " " + j;
+                    ridesCounter++;
+                }
             }
-            fileWriter.write(carRides + '\n');
+            fileWriter.write("" + ridesCounter + carRides + '\n');
         }
         fileWriter.close();
     }
