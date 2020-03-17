@@ -58,4 +58,9 @@ public class TS extends Algorithm {
         // return best solution found
 
     }
+
+    @Override
+    public int[][] getNextState(int[][] state) {
+        return null;
+    }
 }

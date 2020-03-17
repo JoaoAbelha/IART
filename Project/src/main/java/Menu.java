@@ -51,8 +51,9 @@ public class Menu {
     private Algorithm mainMenu() {
 
         System.out.println("========================================================");
-        System.out.println("1- Simulated Annealing");
-        System.out.println("2- Tabu Search");
+        System.out.println("1 - Hill Climbing");
+        System.out.println("2 - Simulated Annealing");
+        System.out.println("3 - Tabu Search");
         System.out.println("========================================================");
         System.out.print("Option: ");
 
@@ -61,8 +62,10 @@ public class Menu {
 
         switch (myInput.nextInt()) {
             case 1:
-                return new SA();
+                return new HC();
             case 2:
+                return new SA();
+            case 3:
                 return new TS();
             default:
                 break;

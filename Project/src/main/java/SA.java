@@ -46,4 +46,9 @@ public class SA extends Algorithm {
 
 
     }
+
+    @Override
+    public int[][] getNextState(int[][] state) {
+        return null;
+    }
 }

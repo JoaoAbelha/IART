@@ -11,12 +11,12 @@ public abstract class Algorithm {
 
     public static Position start = new Position(0,0);
 
-    private int steps;
-    private List<Car> cars = new ArrayList<>();
-    private List<Ride> allRides;
-    private List<Ride> rides; //non assigned rides
-    private int[][] state;
-    private int perRideBonus;
+    protected int steps;
+    protected List<Car> cars = new ArrayList<>();
+    protected List<Ride> allRides;
+    protected List<Ride> rides; //non assigned rides
+    protected int[][] state;
+    protected int perRideBonus;
 
 
     Algorithm() {}
@@ -123,6 +123,7 @@ public abstract class Algorithm {
 
     public abstract void solve();
 
+    public abstract int[][] getNextState(int[][] state);
 
     /*
     * The initial configuration, state, can be random and we simply should try to get better from this point
@@ -137,6 +138,10 @@ public abstract class Algorithm {
 
     public int[][] getState() {
         return this.state;
+    }
+
+    protected boolean validState(int[][] state) {
+        return true;
     }
 
 
