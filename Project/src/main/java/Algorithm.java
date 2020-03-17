@@ -62,10 +62,11 @@ public abstract class Algorithm {
         Collections.sort(rides, Comparator.comparingInt(Ride::getEarliestStart));
 
         int currentStep = 0;
+        int carsSkipped = 0;
 
-        while(currentStep < this.steps && this.rides.size() > 0) {
+        while(currentStep < this.steps && this.rides.size() > carsSkipped) {
 
-            Ride rideToAssign = rides.get(0);
+            Ride rideToAssign = rides.get(carsSkipped);
             int minDistance = Integer.MAX_VALUE;
             Car chosen = null;
             currentStep++;
@@ -84,6 +85,7 @@ public abstract class Algorithm {
             }
 
             if (chosen == null) {
+                carsSkipped++;
                 continue;
             }
 
