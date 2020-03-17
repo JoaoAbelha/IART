@@ -1,9 +1,6 @@
 /*parent class of all algorithm with generic information*/
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 /*
 *  Class that has the attributes common to the problem
@@ -17,6 +14,7 @@ public abstract class Algorithm {
     private int steps;
     private List<Car> cars = new ArrayList<>();
     private List<Ride> rides;
+    private int[][] state;
     private int bonus;
 
 
@@ -31,7 +29,9 @@ public abstract class Algorithm {
         this.rides = rides;
         this.steps = steps;
         this.bonus = bonus;
-
+        this.state = new int[nrCars][rides.size()];
+        System.out.println("n cars = " + nrCars + "; n rides = " + rides.size());
+        System.out.println(this.state[0][0]);
     }
 
 
@@ -85,11 +85,10 @@ public abstract class Algorithm {
                 continue;
             }
 
+            state[chosen.id - 1][rideToAssign.id - 1] = 1;
             chosen.addRide(rideToAssign);
             rides.remove(rideToAssign);
-
             //System.out.println(chosen.busyUntil);
-
         }
 
         for( Car car : cars) {
@@ -98,12 +97,10 @@ public abstract class Algorithm {
                 ride.print();
                 //score += car.score;
             }
-
             System.out.println("----------------------------");
         }
 
         System.out.println("Not assigned rides:" + rides.size());
-
     }
 
     int calculatePoints() {
@@ -125,6 +122,9 @@ public abstract class Algorithm {
 
     }
 
+    public int[][] getState() {
+        return this.state;
+    }
 
 
 }

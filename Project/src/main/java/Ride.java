@@ -1,5 +1,7 @@
 
 public class Ride {
+    private static int idCounter = 1;
+    public int id;
 
     public boolean assigned;
 
@@ -16,6 +18,7 @@ public class Ride {
         this.end = end;
         this.earliestStart = earliestStart;
         this.lastestFinish = latestFinish;
+        this.id = idCounter++;
     }
 
     public void print() {

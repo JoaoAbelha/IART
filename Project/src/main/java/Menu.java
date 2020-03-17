@@ -86,6 +86,21 @@ public class Menu {
 
     }
 
+    private void outputFile() throws IOException {
+        Writer fileWriter = new FileWriter("output.txt", false);
+        int[][] state = problem.getState();
+        for (int i = 0; i < state.length; i++) {
+            String carRides = "" + (i + 1);
+            int[] car = state[i];
+            for (int j = 0; j < car.length; j++) {
+                if (car[j] == 1)
+                    carRides += " " + j;
+            }
+            fileWriter.write(carRides + '\n');
+        }
+        fileWriter.close();
+    }
+
     private void parseFile(File file) throws IOException {
 
         if (file == null) return;
@@ -150,7 +165,7 @@ public class Menu {
             this.problem.initialSolution();
             System.out.println("Trying to create a better solution...");
             this.problem.solve();
-
+            outputFile();
         }
     }
 }
