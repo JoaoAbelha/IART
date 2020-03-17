@@ -10,15 +10,19 @@ public class HC extends Algorithm {
         int[][] currentState = super.state;
         int bestValue = evaluate(currentState);
         boolean improving = true;
-        int[][] nextState;
+        int[][] nextState = null;
         while (true) {
-            System.out.println("oi");
              nextState = getNextState(currentState);
             if (nextState == null) //could not get any better state
                 break;
-            super.state = nextState;
+            currentState = nextState;
         }
-        System.out.println("bye");
+
+        super.state = currentState;
+
+        for (int i = 0; i < state.length; i++) {
+            System.out.println("Car: " + Arrays.toString(state[i]));
+        }
     }
 
     @Override
@@ -30,6 +34,7 @@ public class HC extends Algorithm {
             int[][] newState = null;
             if (rides.size() > 0) {
                 newState = tryAssignRide(state);
+
                 //if(newState == null)
                   //  newState = swapRide(state);
             }
@@ -51,13 +56,17 @@ public class HC extends Algorithm {
     }
 
     private int[][] tryAssignRide(int[][] state) {
-        int rideID = rides.get(0).id;
-        for (int[] car : state) {
-            if (car[rideID - 1] == 0) {
-                car[rideID - 1] = 1;
-                if (validState(state)) {
-                    System.out.println("Found new state");
-                    return state;
+        for(Ride ride : rides) {
+            int rideID = ride.id;
+            for (int i = 0; i < state.length; i++) {
+                int[] car = state[i];
+                if (car[rideID - 1] == 0) {
+                    state[i][rideID - 1] = 1;
+                    if (validState(state)) {
+                        rides.remove(ride);
+                        return state;
+                    }
+                    state[i][rideID - 1] = 0;
                 }
             }
         }
