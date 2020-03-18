@@ -171,6 +171,8 @@ public class Menu {
             this.problem.initialSolution();
             System.out.println("Trying to create a better solution...");
             this.problem.solve();
+            System.out.println("Not assigned rides: " + this.problem.rides.size());
+            System.out.println("Total Points: " + this.problem.evaluate(this.problem.getState()));
             outputFile();
         }
     }

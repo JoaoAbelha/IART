@@ -19,10 +19,6 @@ public class HC extends Algorithm {
         }
 
         super.state = currentState;
-
-        for (int i = 0; i < state.length; i++) {
-            System.out.println("Car: " + Arrays.toString(state[i]));
-        }
     }
 
     @Override
@@ -62,10 +58,25 @@ public class HC extends Algorithm {
                 int[] car = state[i];
                 if (car[rideID - 1] == 0) {
                     state[i][rideID - 1] = 1;
+
+                    // create new node (state)
+                    int newNodeId = ++nodeCounter;
+                    graph.addNode(Integer.toString(newNodeId));
+                    graph.addEdge(Integer.toString(newNodeId), Integer.toString(newNodeId), Integer.toString(currentNode));
                     if (validState(state)) {
+                        // switch state
+                        currentNode = newNodeId;
+
+                        try {
+                            Thread.sleep(100);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                         rides.remove(ride);
                         return state;
                     }
+
+                    currentNode--;
                     state[i][rideID - 1] = 0;
                 }
             }

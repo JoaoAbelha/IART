@@ -1,6 +1,9 @@
 /*parent class of all algorithm with generic information*/
 
 import java.util.*;
+import org.graphstream.graph.*;
+import org.graphstream.graph.implementations.*;
+import org.graphstream.ui.view.Viewer;
 
 /*
 *  Class that has the attributes common to the problem
@@ -17,9 +20,18 @@ public abstract class Algorithm {
     protected List<Ride> rides; //non assigned rides
     protected int[][] state;
     protected int perRideBonus;
+    protected Graph graph;
+    protected int currentNode;
+    protected int nodeCounter;
 
 
-    Algorithm() {}
+    Algorithm() {
+        graph = new MultiGraph("Tutorial 1");
+        currentNode = 0;
+        graph.addNode(Integer.toString(currentNode));
+        Viewer viewer = graph.display();
+        viewer.enableAutoLayout();
+    }
 
 
     public void fillWithData(int rows, int cols, int nrCars, List <Ride> rides, int steps, int bonus) {
