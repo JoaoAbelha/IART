@@ -127,10 +127,29 @@ public abstract class Algorithm {
         Ride ride = allRides.get(0);
         for (int i = 0; i < state.length; i++) {
             int[] car = state[i];
-            for (int j = 0; j < car.length; j++) {
+            int time = 0;
+            Position pos = new Position(0, 0);
+            int j;
+            for (j = 0; j < car.length - 1; j++) {
                 if (car[j] == 1) {
-                    points += allRides.get(j).getDistance();
+                    int distance = allRides.get(j).getDistance();
+                    Position newPos = allRides.get(j).getStart();
+                    points += distance;
+                    time += pos.getDistanceTo(newPos) + distance;
+                    pos = newPos;
+
+                    if (time <= allRides.get(j + 1).getEarliestStart())
+                        points += perRideBonus;
                 }
+            }
+
+            // last ride
+            if (car[j] == 1) {
+                int distance = allRides.get(j).getDistance();
+                Position newPos = allRides.get(j).getStart();
+                points += distance;
+                time += pos.getDistanceTo(newPos) + distance;
+                pos = newPos;
             }
         }
         return points;
