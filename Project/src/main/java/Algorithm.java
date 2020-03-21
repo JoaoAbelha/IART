@@ -176,9 +176,9 @@ public abstract class Algorithm {
         return true;
     }
 
-    protected boolean validAssignement(int vehicleID, int rideID) {
-        int previousRideID = getPreviousRide(vehicleID);
-        int nextRideID = getNextRide(vehicleID);
+    protected boolean validAssignment(int vehicleID, int rideID) {
+        int previousRideID = getPreviousRide(vehicleID, rideID);
+        int nextRideID = getNextRide(vehicleID, rideID);
 
         Ride actualRide = allRides.get(rideID);
 
@@ -204,21 +204,22 @@ public abstract class Algorithm {
                 return false;
             }
         }
+
         return true;
     }
 
-    private int getPreviousRide(int vehicleID) {
+    private int getPreviousRide(int vehicleID, int rideID) {
         int[] vehicleRides = state[vehicleID];
-        for (int i = vehicleID; i > vehicleRides.length; i--) {
+        for (int i = rideID; i > 0; i--) {
             if (vehicleRides[i] == 1)
                 return i;
         }
         return -1;
     }
 
-    private int getNextRide(int vehicleID) {
+    private int getNextRide(int vehicleID, int rideID) {
         int[] vehicleRides = state[vehicleID];
-        for (int i = vehicleID; i > vehicleRides.length; i++) {
+        for (int i = rideID; i > vehicleRides.length; i++) {
             if (vehicleRides[i] == 1)
                 return i;
         }
@@ -240,7 +241,7 @@ public abstract class Algorithm {
             for (int i = 0; i < state.length; i++) {
                 int[] car = state[i];
                 if (car[rideID - 1] == 0) {
-                    if (validAssignement(i, rideID - 1)) {
+                    if (validAssignment(i, rideID - 1)) {
                         state[i][rideID - 1] = 1;
                         rides.remove(ride);
 
@@ -249,9 +250,11 @@ public abstract class Algorithm {
                         //graph.addNode(Integer.toString(newNodeId));
                         //graph.addEdge(Integer.toString(newNodeId), Integer.toString(newNodeId), Integer.toString(currentNode));
                         //currentNode = newNodeId;
+                        System.out.println("valid assignment");
 
                         return state;
                     }
+                    System.out.println("not valid assignment");
                 }
             }
         }
