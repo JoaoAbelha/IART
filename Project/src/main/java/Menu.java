@@ -52,8 +52,9 @@ public class Menu {
 
         System.out.println("========================================================");
         System.out.println("1 - Hill Climbing");
-        System.out.println("2 - Simulated Annealing");
-        System.out.println("3 - Tabu Search");
+        System.out.println("2 - Hill Climbing Steepest Ascent");
+        System.out.println("3 - Simulated Annealing");
+        System.out.println("4 - Tabu Search");
         System.out.println("========================================================");
         System.out.print("Option: ");
 
@@ -64,8 +65,10 @@ public class Menu {
             case 1:
                 return new HC();
             case 2:
-                return new SA();
+                return new SAHC();
             case 3:
+                return new SA();
+            case 4:
                 return new TS();
             default:
                 break;

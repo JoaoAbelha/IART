@@ -250,8 +250,14 @@ public abstract class Algorithm {
     //=======================OPERATORS===============================
     //===============================================================
 
-    protected int[][] swapRide(int[][] state) {
-        return state;
+    protected int[][] trySwapRide(int[][] state) {
+        for(Ride ride : rides) {
+            int rideID = ride.id;
+            for (int j = 0; j < state.length - 1; j++) {
+
+            }
+        }
+        return null;
     }
 
     protected int[][] tryAssignRide(int[][] state) {
@@ -269,11 +275,9 @@ public abstract class Algorithm {
                         //graph.addNode(Integer.toString(newNodeId));
                         //graph.addEdge(Integer.toString(newNodeId), Integer.toString(newNodeId), Integer.toString(currentNode));
                         //currentNode = newNodeId;
-                        System.out.println("valid assignment");
 
                         return state;
                     }
-                    System.out.println("not valid assignment");
                 }
             }
         }
