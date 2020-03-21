@@ -26,11 +26,11 @@ public abstract class Algorithm {
 
 
     Algorithm() {
-        graph = new MultiGraph("Tutorial 1");
+        //graph = new MultiGraph("Tutorial 1");
         currentNode = 0;
-        graph.addNode(Integer.toString(currentNode));
-        Viewer viewer = graph.display();
-        viewer.enableAutoLayout();
+        //graph.addNode(Integer.toString(currentNode));
+        //Viewer viewer = graph.display();
+        //viewer.enableAutoLayout();
     }
 
 
@@ -72,6 +72,7 @@ public abstract class Algorithm {
 
     public void initialSolution() {
         Collections.sort(rides, Comparator.comparingInt(Ride::getEarliestStart));
+        for (Ride ride : rides) ride.setID();
 
         int currentStep = 0;
         int carsSkipped = 0;
@@ -155,7 +156,107 @@ public abstract class Algorithm {
     }
 
     protected boolean validState(int[][] state) {
+        for (int[] vehicleRides : state) {
+            int[] rides = Arrays.stream(vehicleRides).filter(ride -> ride == 1).toArray();
+            int time = 0;
+            for (int i = 0; i < rides.length - 1; i++) {
+                Ride actualRide = allRides.get(rides[i]);
+                Ride nextRide = allRides.get(rides[i + 1]);
+                Position currentPos = actualRide.getEnd();
+                Position nextRideStart = nextRide.getStart();
+
+                time += actualRide.getDistance() + currentPos.getDistanceTo(nextRideStart);
+                int latestStart = nextRide.getLastestFinish() - nextRide.getDistance();
+
+                if (time > latestStart) {
+                    return false;
+                }
+            }
+        }
         return true;
+    }
+
+    protected boolean validAssignement(int vehicleID, int rideID) {
+        int previousRideID = getPreviousRide(vehicleID);
+        int nextRideID = getNextRide(vehicleID);
+
+        Ride actualRide = allRides.get(rideID);
+
+        if (previousRideID != -1) {
+            Ride previousRide = allRides.get(previousRideID);
+            Position previousPos = previousRide.getEnd();
+            Position currentRideStart = actualRide.getStart();
+
+            int latestStart = actualRide.getLastestFinish() - actualRide.getDistance();
+
+            if (previousPos.getDistanceTo(currentRideStart) > latestStart)
+                return false;
+        }
+
+        if (nextRideID != -1) {
+            Ride nextRide = allRides.get(nextRideID);
+            Position currentPos = actualRide.getEnd();
+            Position nextRideStart = nextRide.getStart();
+
+            int latestStart = nextRide.getLastestFinish() - nextRide.getDistance();
+
+            if (currentPos.getDistanceTo(nextRideStart) > latestStart) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private int getPreviousRide(int vehicleID) {
+        int[] vehicleRides = state[vehicleID];
+        for (int i = vehicleID; i > vehicleRides.length; i--) {
+            if (vehicleRides[i] == 1)
+                return i;
+        }
+        return -1;
+    }
+
+    private int getNextRide(int vehicleID) {
+        int[] vehicleRides = state[vehicleID];
+        for (int i = vehicleID; i > vehicleRides.length; i++) {
+            if (vehicleRides[i] == 1)
+                return i;
+        }
+        return -1;
+    }
+
+
+    //===============================================================
+    //=======================OPERATORS===============================
+    //===============================================================
+
+    protected int[][] swapRide(int[][] state) {
+        return state;
+    }
+
+    protected int[][] tryAssignRide(int[][] state) {
+        for(Ride ride : rides) {
+            int rideID = ride.id;
+            for (int i = 0; i < state.length; i++) {
+                int[] car = state[i];
+                if (car[rideID - 1] == 0) {
+                    if (validAssignement(i, rideID - 1)) {
+                        state[i][rideID - 1] = 1;
+                        rides.remove(ride);
+
+                        // create new node (state)
+                        //int newNodeId = ++nodeCounter;
+                        //graph.addNode(Integer.toString(newNodeId));
+                        //graph.addEdge(Integer.toString(newNodeId), Integer.toString(newNodeId), Integer.toString(currentNode));
+                        //currentNode = newNodeId;
+
+                        return state;
+                    }
+                }
+            }
+        }
+        System.out.println("Did not found new state");
+        return null;
     }
 
 

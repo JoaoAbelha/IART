@@ -18,6 +18,9 @@ public class Ride {
         this.end = end;
         this.earliestStart = earliestStart;
         this.lastestFinish = latestFinish;
+    }
+
+    public void setID() {
         this.id = idCounter++;
     }
 
