@@ -285,5 +285,32 @@ public abstract class Algorithm {
         return null;
     }
 
+    protected int[][] getBestAssignState(int[][] state) {
+        int[][] bestState = null;
+        int bestValue = evaluate(state);
+        Ride rideToRemove = null;
+        for(Ride ride : rides) {
+            int rideID = ride.id;
+            for (int i = 0; i < state.length; i++) {
+                int[] car = state[i];
+                if (car[rideID - 1] == 0) {
+                    if (validAssignment(i, rideID - 1)) {
+                        int[][] possibleState = Arrays.stream(state).map(int[]::clone).toArray(int[][]::new); //copy 2D array
+                        possibleState[i][rideID - 1] = 1;
+                        int stateValue = evaluate(possibleState);
+                        if (stateValue > bestValue) {
+                            rideToRemove = ride;
+                            bestValue = stateValue;
+                            bestState = possibleState;
+                        }
+                    }
+                }
+            }
+        }
+        System.out.println(bestValue);
+        rides.remove(rideToRemove);
+        return bestState;
+    }
+
 
 }
