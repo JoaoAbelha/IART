@@ -78,7 +78,7 @@ public class Menu {
             case 4:
                 return new TS();
             case 5:
-                return new GeneticAlgorithm(500, nrRides, 0.1, 0.1, 50, 50, 2000);
+                return new GeneticAlgorithm(10, nrRides, 0.001, 0.7, 5, 5, 10);
             default:
                 break;
         }

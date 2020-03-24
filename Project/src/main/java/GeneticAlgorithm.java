@@ -1,7 +1,11 @@
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
 
 public class GeneticAlgorithm  extends Algorithm {
     private final int tournamentSize;
+    private final int chromosomeLength;
     private int populationSize;
     private double mutationRate;
     private double crossoverRate;
@@ -24,11 +28,14 @@ public class GeneticAlgorithm  extends Algorithm {
         this.elitismCount = elitismCount;
         this.tournamentSize = tournamentSize;
         this.maxGenerations = maxGenerations;
-        this.population = initPopulation(chromosomeLength);
+        this.chromosomeLength = chromosomeLength;
     }
 
     @Override
     public void solve() {
+        this.population = initPopulation(chromosomeLength);
+        System.out.println("wtf");
+
         evaluatePopulation(this.population);
         int generationsCounter = 0;
 
@@ -38,14 +45,22 @@ public class GeneticAlgorithm  extends Algorithm {
             evaluatePopulation(this.population);
         }
 
+        System.out.println("bye dude");
+
         Individual individual = this.population.getFittest(0);
         int[] chromosome = individual.getChromosome();
 
         int vehicle = 0;
-        for (int i = 0; i < chromosome.length; i += cars.size()) {
-            int[] rides = Arrays.copyOfRange(chromosome, i, i + cars.size());
+        for (int i = 0; i < chromosome.length; i += allRides.size()) {
+            int[] rides = Arrays.copyOfRange(chromosome, i, i + allRides.size());
             state[vehicle++] = rides;
         }
+
+        if (validState(state))
+            System.out.println("valid state: " + evaluate(state));
+        else
+            System.out.println("not valid state");
+
     }
 
     @Override
@@ -60,8 +75,9 @@ public class GeneticAlgorithm  extends Algorithm {
             int[][] state = new int[cars.size()][allRides.size()];
             int[] chromosome = individual.getChromosome();
             int vehicle = 0;
-            for (int i = 0; i < chromosome.length; i += cars.size()) {
-                int[] rides = Arrays.copyOfRange(chromosome, i, i + cars.size());
+
+            for (int i = 0; i < chromosome.length; i += allRides.size()) {
+                int[] rides = Arrays.copyOfRange(chromosome, i, i + allRides.size());
                 state[vehicle++] = rides;
             }
             int fitness;
@@ -69,6 +85,7 @@ public class GeneticAlgorithm  extends Algorithm {
                 fitness = evaluate(state);
             else
                 fitness = -1;
+
             individual.setFitness(fitness);
         }
     }
@@ -80,11 +97,50 @@ public class GeneticAlgorithm  extends Algorithm {
      * @return population The initial population generated
      */
     public Population initPopulation(int chromosomeLength){
-        // Initialize population
-        Population population = new Population(this.populationSize, chromosomeLength);
+        //Generate random valid solutions
+
+        Population population = new Population(populationSize);
+
+        // Loop over population size
+        for (int individualCount = 0; individualCount < populationSize; individualCount++) {
+            // Create individual
+            Individual individual = generateValidIndividual();
+            // Add individual to population
+            population.setIndividual(individualCount, individual);
+        }
+
         return population;
     }
 
+    public Individual generateValidIndividual() {
+        List<Ride> nonAssignedRides = new ArrayList<>(allRides); // non assigned rides
+        Random rand = new Random();
+        int vehiclesNo = cars.size();
+        int ridesNo = allRides.size();
+        int[][] individualState = new int[vehiclesNo][ridesNo];
+        for (int i = 0; i < ridesNo; i++) {
+            int vehicleID = rand.nextInt(vehiclesNo);
+
+            if (individualState[vehicleID][i] == 0) {
+                if (validAssignment(vehicleID, i)) {
+                    individualState[vehicleID][i] = 1;
+                    nonAssignedRides.remove(allRides.get(i));
+
+                }
+            }
+        }
+
+        int[] chromosome = new int[vehiclesNo * ridesNo];
+        int counter = 0;
+        for (int i = 0; i < individualState.length; i++) {
+            for (int j = 0; j < individualState[0].length; j++) {
+                chromosome[counter++] = individualState[i][j];
+            }
+        }
+        Individual individual = new Individual(chromosome);
+
+        return individual;
+    }
 
     /**
      * Selects parent for crossover using tournament selection
