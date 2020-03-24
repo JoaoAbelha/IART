@@ -252,9 +252,69 @@ public abstract class Algorithm {
     //=======================OPERATORS===============================
     //===============================================================
 
-    protected int [][] trySwapRandom(int [][] state) {
-        if (state[0] == null) return null;
-       int car_index1 = randomGenerator.nextInt(state.length);
+/*
+// at this moment we can not apply this :(
+    protected int [][] trySwapRandomWSameCar(int [][] current_state) {
+
+        int[][] state = Arrays.stream(current_state).map(int[]::clone).toArray(int[][]::new);
+
+
+        int random_car = randomGenerator.nextInt(state.length);
+
+        int index_base = randomGenerator.nextInt(state[0].length - 1);
+
+        if (state[random_car][index_base] == 1) {
+            int pointer_after = index_base + 1;
+            int pointer_before = index_base - 1;
+
+            while(pointer_before >= 0 && pointer_after < state.length) {
+                if(state[random_car][pointer_before] == 1 && state[random_car][pointer_after] == 1) {
+                    // random select
+                }
+                else if(state[random_car][pointer_before] == 1 ) {
+                    // swap
+                    return state;
+                }
+                else {
+                    // swap
+                    return state;
+                }
+
+            }
+            return null;
+        }
+
+        int pointer_after = index_base + 1;
+        int pointer_before = index_base - 1;
+
+        while(pointer_before >= 0 && pointer_after < state.length) {
+            if(state[random_car][pointer_before] == 1 && state[random_car][pointer_after] == 0) {
+                pointer_after++;
+            }
+
+           else if(state[random_car][pointer_before] == 0 && state[random_car][pointer_after] == 1) {
+                pointer_before--;
+           }
+           else if (state[random_car][pointer_before] == 0 && state[random_car][pointer_after] == 0) {
+                pointer_after--;
+                pointer_after++;
+           }
+            else {
+                state[random_car][pointer_before] = state[random_car][pointer_before] ^ state[random_car][pointer_after];
+                state[random_car][pointer_after] = state[random_car][pointer_before] ^ state[random_car][pointer_after];
+                state[random_car][pointer_before] = state[random_car][pointer_after] ^ state[random_car][pointer_after];
+                return state;
+            }
+
+        }
+        return null;
+    }*/
+
+    protected int [][] trySwapRandom(int [][] current_state) {
+
+        int[][] state = Arrays.stream(current_state).map(int[]::clone).toArray(int[][]::new);
+
+        int car_index1 = randomGenerator.nextInt(state.length);
        int car_index2 = randomGenerator.nextInt(state.length);
 
 
