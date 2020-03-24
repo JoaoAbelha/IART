@@ -12,12 +12,12 @@ import org.graphstream.ui.view.Viewer;
 * */
 public abstract class Algorithm {
 
-    public static Position start = new Position(0,0);
+    public static Position start = new Position(0, 0);
 
     protected int steps;
     protected List<Car> cars = new ArrayList<>();
     protected List<Ride> allRides;
-    protected List<Ride> rides; //non assigned rides
+    protected List<Ride> rides; // non assigned rides
     protected int[][] state;
     protected int perRideBonus;
     protected Graph graph;
@@ -25,19 +25,17 @@ public abstract class Algorithm {
     protected int nodeCounter;
     protected Random randomGenerator;
 
-
     Algorithm() {
-        //graph = new MultiGraph("Tutorial 1");
+        // graph = new MultiGraph("Tutorial 1");
         currentNode = 0;
         randomGenerator = new Random();
-        //graph.addNode(Integer.toString(currentNode));
-        //Viewer viewer = graph.display();
-        //viewer.enableAutoLayout();
+        // graph.addNode(Integer.toString(currentNode));
+        // Viewer viewer = graph.display();
+        // viewer.enableAutoLayout();
     }
 
-
-    public void fillWithData(int rows, int cols, int nrCars, List <Ride> rides, int steps, int bonus) {
-        for(int i = 0; i < nrCars; i++) {
+    public void fillWithData(int rows, int cols, int nrCars, List<Ride> rides, int steps, int bonus) {
+        for (int i = 0; i < nrCars; i++) {
             cars.add(new Car());
         }
         this.steps = steps;
@@ -50,42 +48,52 @@ public abstract class Algorithm {
         System.out.println(this.state[0][0]);
     }
 
-
-    /*GREEDY SOLUTION FOR START*/
-    /*provides a non optimal initial solution that needs to get better*/
-    /*simple solution that chooses a car that is free which distance is shorter to get to the next ride*/
-    /*since rides are sorted the assignment of rides will be done incrementally by start time*/
-    /*although is not a bad algorithm is not optimal: for instance there are left two rides for a car
-    *  start time: 3 latest:8 dist = 3
-    *  start time : 4 latest 9 dist = 5
-    *
-    *  if we are in the time = 3 we choose the first ride that gives us 3 points and we do not have time for the second one
-    *  if we have chosen the second one we would get 5 points
-    *
-    *  by trying to choose the car which is closer to the next person to be transported(sorted) we aim to lose the least time possible
-    * */
+    /* GREEDY SOLUTION FOR START */
+    /* provides a non optimal initial solution that needs to get better */
     /*
-    * A State is constituted of the cars and its assigned rides + the rides that have not been assigned
-    * Neighbor State is a State which have a different configuration from the current state
-    * We should aim for the neighbor states that provide us more points (better solution)
-    * note that the bonus is not taken into account
-    *
-    * */
+     * simple solution that chooses a car that is free which distance is shorter to
+     * get to the next ride
+     */
+    /*
+     * since rides are sorted the assignment of rides will be done incrementally by
+     * start time
+     */
+    /*
+     * although is not a bad algorithm is not optimal: for instance there are left
+     * two rides for a car start time: 3 latest:8 dist = 3 start time : 4 latest 9
+     * dist = 5
+     *
+     * if we are in the time = 3 we choose the first ride that gives us 3 points and
+     * we do not have time for the second one if we have chosen the second one we
+     * would get 5 points
+     *
+     * by trying to choose the car which is closer to the next person to be
+     * transported(sorted) we aim to lose the least time possible
+     */
+    /*
+     * A State is constituted of the cars and its assigned rides + the rides that
+     * have not been assigned Neighbor State is a State which have a different
+     * configuration from the current state We should aim for the neighbor states
+     * that provide us more points (better solution) note that the bonus is not
+     * taken into account
+     *
+     */
 
     public void initialSolution() {
         Collections.sort(rides, Comparator.comparingInt(Ride::getEarliestStart));
-        for (Ride ride : rides) ride.setID();
+        for (Ride ride : rides)
+            ride.setID();
 
         int currentStep = 0;
         int carsSkipped = 0;
 
-        while(currentStep < this.steps && this.rides.size() > carsSkipped) {
+        while (currentStep < this.steps && this.rides.size() > carsSkipped) {
 
             Ride rideToAssign = rides.get(carsSkipped);
             int minDistance = Integer.MAX_VALUE;
             Car chosen = null;
             currentStep++;
-            for(Car car : this.cars) {
+            for (Car car : this.cars) {
                 if (car.isBusy(currentStep)) {
                     continue;
                 }
@@ -93,7 +101,8 @@ public abstract class Algorithm {
                 int distanceBetween = car.position.getDistanceTo(rideToAssign.getStart());
 
                 if (minDistance > distanceBetween) {
-                    if (distanceBetween + rideToAssign.getDistance() + currentStep > rideToAssign.getLastestFinish()) continue;
+                    if (distanceBetween + rideToAssign.getDistance() + currentStep > rideToAssign.getLastestFinish())
+                        continue;
                     minDistance = distanceBetween;
                     chosen = car;
                 }
@@ -108,14 +117,14 @@ public abstract class Algorithm {
             chosen.addRide(rideToAssign);
             rides.remove(rideToAssign);
             rideToAssign.assign();
-            //System.out.println(chosen.busyUntil);
+            // System.out.println(chosen.busyUntil);
         }
 
-        for( Car car : cars) {
+        for (Car car : cars) {
             System.out.println("Car: ");
-            for(Ride ride : car.assignedRides) {
+            for (Ride ride : car.assignedRides) {
                 ride.print();
-                //score += car.score;
+                // score += car.score;
             }
             System.out.println("----------------------------");
         }
@@ -162,13 +171,14 @@ public abstract class Algorithm {
     public abstract int[][] getNextState(int[][] state);
 
     /*
-    * The initial configuration, state, can be random and we simply should try to get better from this point
-    * */
+     * The initial configuration, state, can be random and we simply should try to
+     * get better from this point
+     */
     public void initialRandomSolution() {
 
-       /*
-       * do we want to do this ?
-       */
+        /*
+         * do we want to do this ?
+         */
 
     }
 
@@ -247,37 +257,78 @@ public abstract class Algorithm {
         return -1;
     }
 
+    // ===============================================================
+    // =======================OPERATORS===============================
+    // ===============================================================
 
-    //===============================================================
-    //=======================OPERATORS===============================
-    //===============================================================
+    /*
+     * // at this moment we can not apply this :( protected int [][]
+     * trySwapRandomWSameCar(int [][] current_state) {
+     * 
+     * int[][] state =
+     * Arrays.stream(current_state).map(int[]::clone).toArray(int[][]::new);
+     * 
+     * 
+     * int random_car = randomGenerator.nextInt(state.length);
+     * 
+     * int index_base = randomGenerator.nextInt(state[0].length - 1);
+     * 
+     * if (state[random_car][index_base] == 1) { int pointer_after = index_base + 1;
+     * int pointer_before = index_base - 1;
+     * 
+     * while(pointer_before >= 0 && pointer_after < state.length) {
+     * if(state[random_car][pointer_before] == 1 && state[random_car][pointer_after]
+     * == 1) { // random select } else if(state[random_car][pointer_before] == 1 ) {
+     * // swap return state; } else { // swap return state; }
+     * 
+     * } return null; }
+     * 
+     * int pointer_after = index_base + 1; int pointer_before = index_base - 1;
+     * 
+     * while(pointer_before >= 0 && pointer_after < state.length) {
+     * if(state[random_car][pointer_before] == 1 && state[random_car][pointer_after]
+     * == 0) { pointer_after++; }
+     * 
+     * else if(state[random_car][pointer_before] == 0 &&
+     * state[random_car][pointer_after] == 1) { pointer_before--; } else if
+     * (state[random_car][pointer_before] == 0 && state[random_car][pointer_after]
+     * == 0) { pointer_after--; pointer_after++; } else {
+     * state[random_car][pointer_before] = state[random_car][pointer_before] ^
+     * state[random_car][pointer_after]; state[random_car][pointer_after] =
+     * state[random_car][pointer_before] ^ state[random_car][pointer_after];
+     * state[random_car][pointer_before] = state[random_car][pointer_after] ^
+     * state[random_car][pointer_after]; return state; }
+     * 
+     * } return null; }
+     */
 
-    protected int [][] trySwapRandom(int [][] state) {
-       if (state[0] == null) return null;
-       int car_index1 = randomGenerator.nextInt(state.length);
-       int car_index2 = randomGenerator.nextInt(state.length);
+    protected int[][] trySwapRandom(int[][] current_state) {
 
+        int[][] state = Arrays.stream(current_state).map(int[]::clone).toArray(int[][]::new);
 
-       final double deviation_percentage = 0.15;
-       int range = (int) Math.floor(deviation_percentage * state[0].length);
+        int car_index1 = randomGenerator.nextInt(state.length);
+        int car_index2 = randomGenerator.nextInt(state.length);
 
-       int index1 =  randomGenerator.nextInt(state[0].length);
-       int index2 = Math.max(0, Math.min(randomGenerator.nextInt(index1 + range) -range, state[0].length));
+        final double deviation_percentage = 0.15;
+        int range = (int) Math.floor(deviation_percentage * state[0].length);
 
-       while(state[car_index1][index1] == 1 || state[car_index2][index2] == 1 ) {
-           index1 =  randomGenerator.nextInt(state[0].length);
-           index2 = Math.max(0, Math.min(randomGenerator.nextInt(index1 + range) -range, state[0].length));
-       }
+        int index1 = randomGenerator.nextInt(state[0].length);
+        int index2 = Math.max(0, Math.min(randomGenerator.nextInt(index1 + range) - range, state[0].length));
 
-       state[car_index1][index1] = state[car_index1][index1] ^ state[car_index2][index2];
-       state[car_index2][index2] = state[car_index1][index1] ^ state[car_index2][index2];
-       state[car_index1][index1] = state[car_index1][index1] ^ state[car_index2][index2];
+        while (state[car_index1][index1] == 1 || state[car_index2][index2] == 1) {
+            index1 = randomGenerator.nextInt(state[0].length);
+            index2 = Math.max(0, Math.min(randomGenerator.nextInt(index1 + range) - range, state[0].length));
+        }
 
-       return state;
+        state[car_index1][index1] = state[car_index1][index1] ^ state[car_index2][index2];
+        state[car_index2][index2] = state[car_index1][index1] ^ state[car_index2][index2];
+        state[car_index1][index1] = state[car_index1][index1] ^ state[car_index2][index2];
+
+        return state;
     }
 
     protected int[][] trySwapRide(int[][] state) {
-        for(Ride ride : rides) {
+        for (Ride ride : rides) {
             int rideID = ride.id;
             for (int j = 0; j < state.length - 1; j++) {
 
@@ -287,7 +338,7 @@ public abstract class Algorithm {
     }
 
     protected int[][] tryAssignRide(int[][] state) {
-        for(Ride ride : rides) {
+        for (Ride ride : rides) {
             int rideID = ride.id;
             for (int i = 0; i < state.length; i++) {
                 int[] car = state[i];
@@ -297,10 +348,11 @@ public abstract class Algorithm {
                         rides.remove(ride);
 
                         // create new node (state)
-                        //int newNodeId = ++nodeCounter;
-                        //graph.addNode(Integer.toString(newNodeId));
-                        //graph.addEdge(Integer.toString(newNodeId), Integer.toString(newNodeId), Integer.toString(currentNode));
-                        //currentNode = newNodeId;
+                        // int newNodeId = ++nodeCounter;
+                        // graph.addNode(Integer.toString(newNodeId));
+                        // graph.addEdge(Integer.toString(newNodeId), Integer.toString(newNodeId),
+                        // Integer.toString(currentNode));
+                        // currentNode = newNodeId;
 
                         return state;
                     }
@@ -315,13 +367,14 @@ public abstract class Algorithm {
         int[][] bestState = null;
         int bestValue = evaluate(state);
         Ride rideToRemove = null;
-        for(Ride ride : rides) {
+        for (Ride ride : rides) {
             int rideID = ride.id;
             for (int i = 0; i < state.length; i++) {
                 int[] car = state[i];
                 if (car[rideID - 1] == 0) {
                     if (validAssignment(i, rideID - 1)) {
-                        int[][] possibleState = Arrays.stream(state).map(int[]::clone).toArray(int[][]::new); //copy 2D array
+                        int[][] possibleState = Arrays.stream(state).map(int[]::clone).toArray(int[][]::new); // copy 2D
+                                                                                                              // array
                         possibleState[i][rideID - 1] = 1;
                         int stateValue = evaluate(possibleState);
                         if (stateValue > bestValue) {
@@ -337,6 +390,5 @@ public abstract class Algorithm {
         rides.remove(rideToRemove);
         return bestState;
     }
-
 
 }
