@@ -1,26 +1,76 @@
 import java.util.Arrays;
 
-public class GeneticAlgorithm {
+public class GeneticAlgorithm  extends Algorithm {
     private final int tournamentSize;
     private int populationSize;
     private double mutationRate;
     private double crossoverRate;
     private int elitismCount;
+    private int maxGenerations;
+    private Population population;
 
 
 
-    public boolean isTerminationConditionMet(int generationsCount, int maxGenerations) {
-        return (generationsCount > maxGenerations);
+    public boolean isTerminationConditionMet(int generationsCount) {
+        return (generationsCount > this.maxGenerations);
     }
 
-    public GeneticAlgorithm(int populationSize, double mutationRate, double crossoverRate, int elitismCount,
-                            int tournamentSize) {
-
+    public GeneticAlgorithm(int populationSize, int chromosomeLength, double mutationRate, double crossoverRate, int elitismCount,
+                            int tournamentSize, int maxGenerations) {
+        super();
         this.populationSize = populationSize;
         this.mutationRate = mutationRate;
         this.crossoverRate = crossoverRate;
         this.elitismCount = elitismCount;
         this.tournamentSize = tournamentSize;
+        this.maxGenerations = maxGenerations;
+        this.population = initPopulation(chromosomeLength);
+    }
+
+    @Override
+    public void solve() {
+        evaluatePopulation(this.population);
+        int generationsCounter = 0;
+
+        while(!isTerminationConditionMet(generationsCounter++)) {
+            this.population = crossoverPopulation(this.population);
+            this.population = mutatePopulation(this.population);
+            evaluatePopulation(this.population);
+        }
+
+        Individual individual = this.population.getFittest(0);
+        int[] chromosome = individual.getChromosome();
+
+        int vehicle = 0;
+        for (int i = 0; i < chromosome.length; i += cars.size()) {
+            int[] rides = Arrays.copyOfRange(chromosome, i, i + cars.size());
+            state[vehicle++] = rides;
+        }
+    }
+
+    @Override
+    public int[][] getNextState(int[][] state) {
+        return new int[0][];
+    }
+
+    private void evaluatePopulation(Population population) {
+        Individual[] individuals = population.getIndividuals();
+
+        for (Individual individual : individuals) {
+            int[][] state = new int[cars.size()][allRides.size()];
+            int[] chromosome = individual.getChromosome();
+            int vehicle = 0;
+            for (int i = 0; i < chromosome.length; i += cars.size()) {
+                int[] rides = Arrays.copyOfRange(chromosome, i, i + cars.size());
+                state[vehicle++] = rides;
+            }
+            int fitness;
+            if (validState(state))
+                fitness = evaluate(state);
+            else
+                fitness = -1;
+            individual.setFitness(fitness);
+        }
     }
 
     /**
@@ -35,17 +85,11 @@ public class GeneticAlgorithm {
         return population;
     }
 
-    /*calculate fitness*/
-
-    /*evaluate population*/
 
     /**
      * Selects parent for crossover using tournament selection
      *
-     * Tournament selection was introduced in Chapter 3
-     *
      * @param population
-     *
      * @return The individual selected as a parent
      */
     public Individual selectParent(Population population) {
@@ -64,26 +108,12 @@ public class GeneticAlgorithm {
     }
 
     /**
-     * Ordered crossover mutation
-     *
-     * Chromosomes in the TSP require that each city is visited exactly once.
-     * Uniform crossover can break the chromosome by accidentally selecting a
-     * city that has already been visited from a parent; this would lead to one
-     * city being visited twice and another city being skipped altogether.
-     *
-     * Additionally, uniform or random crossover doesn't really preserve the
-     * most important aspect of the genetic information: the specific order of a
-     * group of cities.
-     *
-     * We need a more clever crossover algorithm here. What we can do is choose
-     * two pivot points, add chromosomes from one parent for one of the ranges,
-     * and then only add not-yet-represented cities to the second range. This
-     * ensures that no cities are skipped or visited twice, while also
-     * preserving ordered batches of cities.
+     * Crossover population
      *
      * @param population
      * @return The new population
      */
+
     public Population crossoverPopulation(Population population){
         // Create new population
         Population newPopulation = new Population(population.size());
@@ -93,57 +123,41 @@ public class GeneticAlgorithm {
             // Get parent1
             Individual parent1 = population.getFittest(populationIndex);
 
-            // Apply crossover to this individual?
+            // Apply crossover to the individual if it is not Elite
             if (this.crossoverRate > Math.random() && populationIndex >= this.elitismCount) {
                 // Find parent2 with tournament selection
                 Individual parent2 = this.selectParent(population);
 
-                // Create blank offspring chromosome
-                int offspringChromosome[] = new int[parent1.getChromosomeLength()];
-                Arrays.fill(offspringChromosome, -1);
-                Individual offspring = new Individual(offspringChromosome);
+                // Create empty chromosome
+                int emptyChromosome[] = new int[parent1.getChromosomeLength()];
+                Arrays.fill(emptyChromosome, -1);
+                Individual child = new Individual(emptyChromosome);
 
                 // Get subset of parent chromosomes
-                int substrPos1 = (int) (Math.random() * parent1.getChromosomeLength());
-                int substrPos2 = (int) (Math.random() * parent1.getChromosomeLength());
+                int intitPos = (int) (Math.random() * parent1.getChromosomeLength());
+                int finalPos = (int) (Math.random() * parent1.getChromosomeLength());
 
                 // make the smaller the start and the larger the end
-                final int startSubstr = Math.min(substrPos1, substrPos2);
-                final int endSubstr = Math.max(substrPos1, substrPos2);
+                final int startSubstr = Math.min(intitPos, finalPos);
+                final int endSubstr = Math.max(intitPos, finalPos);
 
-                // Loop and add the sub tour from parent1 to our child
-                for (int i = startSubstr; i < endSubstr; i++) {
-                    offspring.setGene(i, parent1.getGene(i));
+                // add parent2 genes to the child
+                for (int i = 0; i < parent1.getChromosomeLength(); i++) {
+                    child.setGene(i, parent2.getGene(i));
                 }
 
-                // Loop through parent2's city tour
-                for (int i = 0; i < parent2.getChromosomeLength(); i++) {
-                    int parent2Gene = i + endSubstr;
-                    if (parent2Gene >= parent2.getChromosomeLength()) {
-                        parent2Gene -= parent2.getChromosomeLength();
-                    }
-
-                    // If offspring doesn't have the city add it
-                    if (offspring.containsGene(parent2.getGene(parent2Gene)) == false) {
-                        // Loop to find a spare position in the child's tour
-                        for (int ii = 0; ii < offspring.getChromosomeLength(); ii++) {
-                            // Spare position found, add city
-                            if (offspring.getGene(ii) == -1) {
-                                offspring.setGene(ii, parent2.getGene(parent2Gene));
-                                break;
-                            }
-                        }
-                    }
+                // add parent1 genes to the child
+                for (int i = startSubstr; i < endSubstr; i++) {
+                    child.setGene(i, parent1.getGene(i));
                 }
 
                 // Add child
-                newPopulation.setIndividual(populationIndex, offspring);
+                newPopulation.setIndividual(populationIndex, child);
             } else {
                 // Add individual to new population without applying crossover
                 newPopulation.setIndividual(populationIndex, parent1);
             }
         }
-
         return newPopulation;
     }
 
@@ -157,20 +171,13 @@ public class GeneticAlgorithm {
 
             // Skip mutation if this is an elite individual
             if (populationIndex >= this.elitismCount) {
-                // System.out.println("Mutating population member "+populationIndex);
                 // Loop over individual's genes
                 for (int geneIndex = 0; geneIndex < individual.getChromosomeLength(); geneIndex++) {
-                    // System.out.println("\tGene index "+geneIndex);
-                    // Does this gene need mutation?
+                    // mutate gene with mutationRate
                     if (this.mutationRate > Math.random()) {
-                        // Get new gene position
+                        // flip random gene
                         int newGenePos = (int) (Math.random() * individual.getChromosomeLength());
-                        // Get genes to swap
-                        int gene1 = individual.getGene(newGenePos);
-                        int gene2 = individual.getGene(geneIndex);
-                        // Swap genes
-                        individual.setGene(geneIndex, gene1);
-                        individual.setGene(newGenePos, gene2);
+                        individual.flipGene(newGenePos);
                     }
                 }
             }
@@ -182,6 +189,4 @@ public class GeneticAlgorithm {
         // Return mutated population
         return newPopulation;
     }
-
-
 }

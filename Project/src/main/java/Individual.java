@@ -1,3 +1,5 @@
+import java.util.Random;
+
 public class Individual {
 
     private int[] chromosome;
@@ -9,7 +11,7 @@ public class Individual {
      * @param chromosome The chromosome to give individual
      */
     public Individual(int[] chromosome) {
-        // Create individualchromosome
+        // Create individual chromosome
         this.chromosome = chromosome;
     }
 
@@ -23,14 +25,12 @@ public class Individual {
         int[] individual;
         individual = new int[chromosomeLength];
 
-        /**
-         * In this case, we can no longer simply pick 0s and 1s -- we need to
-         * use every city index available. We also don't need to randomize or
-         * shuffle this chromosome, as crossover and mutation will ultimately
-         * take care of that for us.
-         */
+        Random rand = new Random();
         for (int gene = 0; gene < chromosomeLength; gene++) {
-            individual[gene] = gene;
+            if(0.001 > Math.random())
+                individual[gene] = 1;
+            else
+                individual[gene] = 0;
         }
 
         this.chromosome = individual;
@@ -112,6 +112,10 @@ public class Individual {
     }
 
     public int getGene(int i) {
-        return 0;
+        return this.chromosome[i];
+    }
+
+    public void flipGene(int i) {
+        this.chromosome[i] ^= 1;
     }
 }

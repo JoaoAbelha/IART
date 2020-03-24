@@ -22,6 +22,12 @@ public class Menu {
 
     public static int errorStatus = 1;
     public Algorithm problem;
+    private int row;
+    private int col;
+    private int nrCars;
+    private int nrRides;
+    private int bonus;
+    private int steps;
 
     public static void main(String[] args) {
 
@@ -55,6 +61,7 @@ public class Menu {
         System.out.println("2 - Hill Climbing Steepest Ascent");
         System.out.println("3 - Simulated Annealing");
         System.out.println("4 - Tabu Search");
+        System.out.println("5 - Genetic Algorithm");
         System.out.println("========================================================");
         System.out.print("Option: ");
 
@@ -70,6 +77,8 @@ public class Menu {
                 return new SA();
             case 4:
                 return new TS();
+            case 5:
+                return new GeneticAlgorithm(500, nrRides, 0.1, 0.1, 50, 50, 2000);
             default:
                 break;
         }
@@ -114,13 +123,6 @@ public class Menu {
 
         if (file == null) return;
         List<Ride> rides = new ArrayList<>();
-        int row;
-        int col;
-        int nrCars;
-        int nrRides;
-        int bonus;
-        int steps;
-
 
         try (FileReader reader = new FileReader(file);
              BufferedReader br = new BufferedReader(reader)) {

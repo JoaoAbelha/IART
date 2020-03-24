@@ -114,7 +114,7 @@ public class Population {
     }
 
     /**
-     * Shuffles the population in-place
+     * Shuffles the population
      *
      * @return void
      */

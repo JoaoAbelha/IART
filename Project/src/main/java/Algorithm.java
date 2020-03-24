@@ -253,7 +253,7 @@ public abstract class Algorithm {
     //===============================================================
 
     protected int [][] trySwapRandom(int [][] state) {
-        if (state[0] == null) return null;
+       if (state[0] == null) return null;
        int car_index1 = randomGenerator.nextInt(state.length);
        int car_index2 = randomGenerator.nextInt(state.length);
 
