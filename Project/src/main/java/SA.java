@@ -4,7 +4,7 @@ public class SA extends Algorithm {
 
 
     //Set initial temp
-    final double TEMPERATURE_INITIAL = 800000;
+    final double TEMPERATURE_INITIAL = 500000;
 
     double temperature; /*current temperature*/
 

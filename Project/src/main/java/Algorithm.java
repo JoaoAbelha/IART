@@ -264,6 +264,11 @@ public abstract class Algorithm {
        int index1 =  randomGenerator.nextInt(state[0].length);
        int index2 = Math.max(0, Math.min(randomGenerator.nextInt(index1 + range) -range, state[0].length));
 
+       while(state[car_index1][index1] == 1 || state[car_index2][index2] == 1 ) {
+           index1 =  randomGenerator.nextInt(state[0].length);
+           index2 = Math.max(0, Math.min(randomGenerator.nextInt(index1 + range) -range, state[0].length));
+       }
+
        state[car_index1][index1] = state[car_index1][index1] ^ state[car_index2][index2];
        state[car_index2][index2] = state[car_index1][index1] ^ state[car_index2][index2];
        state[car_index1][index1] = state[car_index1][index1] ^ state[car_index2][index2];
