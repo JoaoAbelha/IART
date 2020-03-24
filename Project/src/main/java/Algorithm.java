@@ -23,11 +23,13 @@ public abstract class Algorithm {
     protected Graph graph;
     protected int currentNode;
     protected int nodeCounter;
+    protected Random randomGenerator;
 
 
     Algorithm() {
         //graph = new MultiGraph("Tutorial 1");
         currentNode = 0;
+        randomGenerator = new Random();
         //graph.addNode(Integer.toString(currentNode));
         //Viewer viewer = graph.display();
         //viewer.enableAutoLayout();
@@ -249,6 +251,25 @@ public abstract class Algorithm {
     //===============================================================
     //=======================OPERATORS===============================
     //===============================================================
+
+    protected int [][] trySwapRandom(int [][] state) {
+        if (state[0] == null) return null;
+       int car_index1 = randomGenerator.nextInt(state.length);
+       int car_index2 = randomGenerator.nextInt(state.length);
+
+
+       final double deviation_percentage = 0.15;
+       int range = (int) Math.floor(deviation_percentage * state[0].length);
+
+       int index1 =  randomGenerator.nextInt(state[0].length);
+       int index2 = Math.max(0, Math.min(randomGenerator.nextInt(index1 + range) -range, state[0].length));
+
+       state[car_index1][index1] = state[car_index1][index1] ^ state[car_index2][index2];
+       state[car_index2][index2] = state[car_index1][index1] ^ state[car_index2][index2];
+       state[car_index1][index1] = state[car_index1][index1] ^ state[car_index2][index2];
+
+       return state;
+    }
 
     protected int[][] trySwapRide(int[][] state) {
         for(Ride ride : rides) {

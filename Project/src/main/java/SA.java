@@ -4,7 +4,7 @@ public class SA extends Algorithm {
 
 
     //Set initial temp
-    final double TEMPERATURE_INITIAL = 500000;
+    final double TEMPERATURE_INITIAL = 800000;
 
     double temperature; /*current temperature*/
 
@@ -19,6 +19,7 @@ public class SA extends Algorithm {
     @Override
     public int[][] getNextState(int[][] current_state) {
         int[][] state = Arrays.stream(current_state).map(int[]::clone).toArray(int[][]::new);
+
         return tryAssignRide(state);
     }
 
