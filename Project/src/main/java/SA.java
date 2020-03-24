@@ -1,14 +1,15 @@
+import java.util.Arrays;
 
 public class SA extends Algorithm {
 
 
     //Set initial temp
-    final double TEMPERATURE_INITIAL = 100000;
+    final double TEMPERATURE_INITIAL = 500000;
 
-    double temperature;
+    double temperature; /*current temperature*/
 
     //Cooling rate
-    double coolingRate = 0.003;
+    double coolingRate = 0.001;
 
 
     public SA() {
@@ -16,11 +17,9 @@ public class SA extends Algorithm {
     }
 
     @Override
-    public int[][] getNextState(int[][] state) {
-        // insertion
-        // swap type1 and swap type2
-
-        return null;
+    public int[][] getNextState(int[][] current_state) {
+        int[][] state = Arrays.stream(current_state).map(int[]::clone).toArray(int[][]::new);
+        return tryAssignRide(state);
     }
 
     @Override
@@ -33,8 +32,12 @@ public class SA extends Algorithm {
         int currentSolution;
         int bestSolution = evaluation;
 
+        int [][] best_state = currentState;
+
 
         while(temperature > 1) {
+
+            if(this.rides.size() == 0) break;
 
             int [][] new_state = getNextState(currentState);
 
@@ -43,19 +46,21 @@ public class SA extends Algorithm {
             // if is better, always accept
             if (currentSolution > bestSolution) {
                 bestSolution = currentSolution;
-                currentState = state;
+                currentState = new_state;
+                best_state = currentState;
             }
             else { // if is not better, accept based on probability
                 int delta = bestSolution - currentSolution;
                 double random = Math.random();
                 if (random <  Math.exp(- delta/ temperature)) {
-                    currentState = state;
+                    currentState = new_state;
                 }
             }
 
             temperature *=  (1- coolingRate);
         }
 
+        super.state = best_state;
 
     }
 
