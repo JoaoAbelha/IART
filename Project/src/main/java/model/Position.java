@@ -1,3 +1,5 @@
+package model;
+
 public class Position {
 
     private int x, y;
@@ -32,4 +34,9 @@ public class Position {
 
         return p.x == this.x && p.y == this.y;
     }
+
+    @Override
+	public Position clone() {
+		return new Position(x, y);
+	}
 }

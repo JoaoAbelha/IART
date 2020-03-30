@@ -1,3 +1,4 @@
+package model;
 
 public class Ride {
     private static int idCounter = 1;
@@ -18,6 +19,15 @@ public class Ride {
         this.end = end;
         this.earliestStart = earliestStart;
         this.lastestFinish = latestFinish;
+    }
+
+    public Ride(int id, boolean assigned, Position start, Position end, int earliestStart, int lastestFinish) {
+        this.id = id;
+        this.assigned = assigned;
+        this.start = start;
+        this.end = end;
+        this.earliestStart = earliestStart;
+        this.lastestFinish = lastestFinish;
     }
 
     public void setID() {
@@ -67,5 +77,8 @@ public class Ride {
     }
 
 
-
+    @Override
+	public Ride clone() {
+		return new Ride(id, assigned, start.clone(), end.clone(), earliestStart, lastestFinish);
+	}
 }

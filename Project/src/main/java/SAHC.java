@@ -1,4 +1,5 @@
 import java.util.Arrays;
+import common.Algorithm;
 
 public class SAHC extends Algorithm {
     public SAHC() {

@@ -1,3 +1,4 @@
+import common.Algorithm;
 
 public class SA extends Algorithm {
 

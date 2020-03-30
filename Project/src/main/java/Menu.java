@@ -1,6 +1,13 @@
 import java.io.*;
 import java.net.URL;
 import java.util.*;
+import common.Algorithm;
+import common.Problem;
+import common.Solution;
+import common.initial_solution.GreedySolutionGenerator;
+import model.Car;
+import model.Position;
+import model.Ride;
 
 /*
 *** Java graph library for dynamic visualisation:
@@ -19,9 +26,8 @@ import java.util.*;
 * */
 
 public class Menu {
-
     public static int errorStatus = 1;
-    public Algorithm problem;
+    public Problem problem;
 
     public static void main(String[] args) {
 
@@ -42,9 +48,6 @@ public class Menu {
             System.out.println("Error while reading the file");
             e.printStackTrace();
         }
-
-
-
     }
 
     /*TODO: complete the menu*/
@@ -94,16 +97,13 @@ public class Menu {
 
     private void outputFile() throws IOException {
         Writer fileWriter = new FileWriter("output.txt", false);
-        int[][] state = problem.getState();
-        for (int i = 0; i < state.length; i++) {
+        List<Car> state = problem.getSolution().getState();
+        for(Car car : state) {
             String carRides = "";
-            int[] car = state[i];
             int ridesCounter = 0;
-            for (int j = 0; j < car.length; j++) {
-                if (car[j] == 1) {
-                    carRides += " " + j;
-                    ridesCounter++;
-                }
+            for(Ride ride : car.getAssignedRides()) {
+                carRides += " " + ride.id;
+                ridesCounter++;
             }
             fileWriter.write("" + ridesCounter + carRides + '\n');
         }
@@ -168,10 +168,10 @@ public class Menu {
             }
 
             /*todo: validate positions accordingly to the number of rows and columns */
-            this.problem = mainMenu();
-            this.problem.fillWithData(row, col, nrCars, rides, steps, bonus);
+            this.problem = new Problem(nrCars, rides, steps, bonus);
             System.out.println("Created the problem");
-            this.problem.initialSolution();
+            GreedySolutionGenerator greedySolutionGenerator = new GreedySolutionGenerator();
+            this.problem.setSolution(greedySolutionGenerator.initialSolution(this.problem));
             System.out.println("Trying to create a better solution...");
             this.problem.solve();
             System.out.println("Not assigned rides: " + this.problem.rides.size());
