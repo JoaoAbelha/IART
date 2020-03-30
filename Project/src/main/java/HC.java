@@ -8,14 +8,15 @@ public class HC extends Algorithm {
     @Override
     public void solve() {
         int[][] currentState = super.state;
-        int bestValue = evaluate(currentState);
-        boolean improving = true;
         int[][] nextState = null;
+        int iteration = 0;
         while (true) {
              nextState = getNextState(currentState);
             if (nextState == null) //could not get any better state
                 break;
             currentState = nextState;
+
+            // System.out.println("Iteration: " + iteration++ + "\nTotal Points: " + currentValue + "\nNon Assigned Rides: " + rides.size() + "\n");
         }
 
         super.state = currentState;
@@ -42,8 +43,11 @@ public class HC extends Algorithm {
             if (newState == null)
                 return null;
 
-            if (evaluate(newState) > currentValue)
+            int newValue = evaluate(newState);
+            if (newValue > currentValue) {
+                super.currentValue = newValue;
                 return newState;
+            }
         }
     }
 }

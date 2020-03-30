@@ -13,11 +13,14 @@ public class SAHC extends Algorithm {
         int bestValue = evaluate(currentState);
         boolean improving = true;
         int[][] nextState = null;
+        int iteration = 0;
         while (true) {
             nextState = getNextState(currentState);
             if (nextState == null) //could not get any better state
                 break;
             currentState = nextState;
+
+            // System.out.println("Iteration: " + iteration++ + "\nTotal Points: " + currentValue + "\nNon Assigned Rides: " + rides.size() + "\n");
         }
 
         super.state = currentState;

@@ -24,6 +24,7 @@ public abstract class Algorithm {
     protected int currentNode;
     protected int nodeCounter;
     protected Random randomGenerator;
+    protected int currentValue = 0;
 
     Algorithm() {
         // graph = new MultiGraph("Tutorial 1");
@@ -129,7 +130,7 @@ public abstract class Algorithm {
             System.out.println("----------------------------");
         }
 
-        System.out.println("Not assigned rides: " + rides.size());
+        System.out.println("Non assigned rides: " + rides.size());
         System.out.println("Total Points: " + evaluate(state));
     }
 
@@ -386,7 +387,7 @@ public abstract class Algorithm {
                 }
             }
         }
-        System.out.println(bestValue);
+        currentValue = bestValue;
         rides.remove(rideToRemove);
         return bestState;
     }

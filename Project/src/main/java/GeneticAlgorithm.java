@@ -16,7 +16,7 @@ public class GeneticAlgorithm  extends Algorithm {
 
 
     public boolean isTerminationConditionMet(int generationsCount) {
-        return (generationsCount > this.maxGenerations);
+        return (generationsCount >= this.maxGenerations);
     }
 
     public GeneticAlgorithm(int populationSize, int chromosomeLength, double mutationRate, double crossoverRate, int elitismCount,
@@ -43,6 +43,7 @@ public class GeneticAlgorithm  extends Algorithm {
             this.population = crossoverPopulation(this.population);
             this.population = mutatePopulation(this.population);
             evaluatePopulation(this.population);
+            // System.out.println("Iteration: " + generationsCounter + "\nTotal Points: " + currentValue + "\n");
         }
 
         System.out.println("bye dude");
@@ -178,6 +179,8 @@ public class GeneticAlgorithm  extends Algorithm {
         for (int populationIndex = 0; populationIndex < population.size(); populationIndex++) {
             // Get parent1
             Individual parent1 = population.getFittest(populationIndex);
+            if (populationIndex == 0)
+                super.currentValue = parent1.getFitness();
 
             // Apply crossover to the individual if it is not Elite
             if (this.crossoverRate > Math.random() && populationIndex >= this.elitismCount) {

@@ -78,7 +78,7 @@ public class Menu {
             case 4:
                 return new TS();
             case 5:
-                return new GeneticAlgorithm(10, nrRides, 0.001, 0.7, 5, 5, 10);
+                return new GeneticAlgorithm(10, nrRides, 0.001, 0.7, 5, 5, 100);
             default:
                 break;
         }
@@ -176,7 +176,7 @@ public class Menu {
             this.problem.initialSolution();
             System.out.println("Trying to create a better solution...");
             this.problem.solve();
-            System.out.println("Not assigned rides: " + this.problem.rides.size());
+            System.out.println("Non assigned rides: " + this.problem.rides.size());
             System.out.println("Total Points: " + this.problem.evaluate(this.problem.getState()));
             outputFile();
         }

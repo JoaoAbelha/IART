@@ -35,7 +35,7 @@ public class SA extends Algorithm {
 
         int [][] best_state = currentState;
 
-
+        int iteration = 0;
         while(temperature > 1) {
 
             if(this.rides.size() == 0) break;
@@ -59,6 +59,7 @@ public class SA extends Algorithm {
             }
 
             temperature *=  (1- coolingRate);
+            // System.out.println("Iteration: " + iteration++ + "\nTotal Points: " + currentSolution + "\nNon Assigned Rides: " + rides.size() + "\n");
         }
 
         super.state = best_state;

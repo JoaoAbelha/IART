@@ -3,7 +3,7 @@ import java.util.Random;
 public class Individual {
 
     private int[] chromosome;
-    private double fitness = -1;
+    private int fitness = -1;
 
     /**
      * Initializes individual with specific chromosome
@@ -70,7 +70,7 @@ public class Individual {
      * @param fitness
      *            The individuals fitness
      */
-    public void setFitness(double fitness) {
+    public void setFitness(int fitness) {
         this.fitness = fitness;
     }
 
@@ -79,7 +79,7 @@ public class Individual {
      *
      * @return The individual's fitness
      */
-    public double getFitness() {
+    public int getFitness() {
         return this.fitness;
     }
 
