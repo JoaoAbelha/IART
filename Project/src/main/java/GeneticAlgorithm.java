@@ -42,7 +42,8 @@ public class GeneticAlgorithm  extends Algorithm {
             this.population = crossoverPopulation(this.population);
             this.population = mutatePopulation(this.population);
             evaluatePopulation(this.population);
-            System.out.println("Iteration: " + generationsCounter + "\nTotal Points: " + currentValue + "\n");
+            // System.out.println("Iteration: " + generationsCounter + "\nTotal Points: " + currentValue + "\n");
+            values.add(currentValue);
         }
 
 

@@ -9,14 +9,15 @@ public class HC extends Algorithm {
     public void solve() {
         int[][] currentState = super.state;
         int[][] nextState = null;
-        int iteration = 0;
         while (true) {
              nextState = getNextState(currentState);
             if (nextState == null) //could not get any better state
                 break;
             currentState = nextState;
 
-            System.out.println("Iteration: " + iteration++ + "\nTotal Points: " + currentValue + "\nNon Assigned Rides: " + rides.size() + "\n");
+            //System.out.println("Iteration: " + iteration + "\nTotal Points: " + currentValue + "\nNon Assigned Rides: " + rides.size() + "\n");
+            values.add(currentValue);
+            iteration++;
         }
 
         super.state = currentState;

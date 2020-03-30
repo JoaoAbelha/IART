@@ -2,8 +2,9 @@
 
 import java.util.*;
 import org.graphstream.graph.*;
-import org.graphstream.graph.implementations.*;
-import org.graphstream.ui.view.Viewer;
+import org.knowm.xchart.QuickChart;
+import org.knowm.xchart.SwingWrapper;
+import org.knowm.xchart.XYChart;
 
 /*
 *  Class that has the attributes common to the problem
@@ -25,6 +26,11 @@ public abstract class Algorithm {
     protected int nodeCounter;
     protected Random randomGenerator;
     protected int currentValue = 0;
+    protected List<Integer> values = new ArrayList<>();
+    double[][] initdata = new double[][] {{1}, {1}};
+    boolean isRunning = true;
+    int iteration = 0;
+
 
     Algorithm() {
         // graph = new MultiGraph("Tutorial 1");
@@ -33,6 +39,54 @@ public abstract class Algorithm {
         // graph.addNode(Integer.toString(currentNode));
         // Viewer viewer = graph.display();
         // viewer.enableAutoLayout();
+
+
+        // Create Chart
+        final XYChart chart = QuickChart.getChart("Value per Iteration", "Iteration", "Value", "value", initdata[0], initdata[1]);
+        final SwingWrapper<XYChart> sw = new SwingWrapper<XYChart>(chart);
+        sw.displayChart();
+
+
+
+        Thread thread = new Thread(){
+            public void run(){
+                int counter = 0;
+                while (isRunning) {
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    final double[][] data;
+
+                    if (counter < iteration) {
+                        counter++;
+                    }
+                    try {
+                        data = getValues(counter);
+                        chart.updateXYSeries("value", data[0], data[1], null);
+                        sw.repaintChart();
+                    } catch (IndexOutOfBoundsException e) {
+                        e.printStackTrace();
+                        System.out.println("cresfkea\nfaiwejfewia\ndkjewaid");
+                        return;
+                    }
+
+                }
+            }
+        };
+        thread.start();
+
+    }
+
+    private double[][] getValues(int counter) {
+        double[] xData = new double[counter];
+        double[] yData = new double[counter];
+        for (int i = 0; i < counter; i++) {
+                yData[i] = values.get(i);
+                xData[i] = i;
+        }
+        return new double[][] { xData, yData };
     }
 
     public void fillWithData(int rows, int cols, int nrCars, List<Ride> rides, int steps, int bonus) {
@@ -130,8 +184,10 @@ public abstract class Algorithm {
             System.out.println("----------------------------");
         }
 
+        int stateValue = evaluate(state);
+        values.add(stateValue);
         System.out.println("Non assigned rides: " + rides.size());
-        System.out.println("Total Points: " + evaluate(state));
+        System.out.println("Total Points: " + stateValue);
     }
 
     int evaluate(int[][] state) {
