@@ -78,7 +78,7 @@ public class Menu {
             case 4:
                 return new TS();
             case 5:
-                return new GeneticAlgorithm(10, nrRides, 0.001, 0.7, 5, 5, 100);
+                return new GeneticAlgorithm(10, nrRides, 0.001, 0.7, 5, 5, 1000);
             default:
                 break;
         }
@@ -175,9 +175,12 @@ public class Menu {
             System.out.println("Created the problem");
             this.problem.initialSolution();
             System.out.println("Trying to create a better solution...");
+            long startTime = System.nanoTime();
             this.problem.solve();
+            long estimatedTime = System.nanoTime() - startTime;
             System.out.println("Non assigned rides: " + this.problem.rides.size());
             System.out.println("Total Points: " + this.problem.evaluate(this.problem.getState()));
+            System.out.println("Execution Time(ms): " + estimatedTime/1000000);
             outputFile();
         }
     }

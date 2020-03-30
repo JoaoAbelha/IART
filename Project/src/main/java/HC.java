@@ -16,7 +16,7 @@ public class HC extends Algorithm {
                 break;
             currentState = nextState;
 
-            // System.out.println("Iteration: " + iteration++ + "\nTotal Points: " + currentValue + "\nNon Assigned Rides: " + rides.size() + "\n");
+            System.out.println("Iteration: " + iteration++ + "\nTotal Points: " + currentValue + "\nNon Assigned Rides: " + rides.size() + "\n");
         }
 
         super.state = currentState;

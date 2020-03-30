@@ -34,7 +34,6 @@ public class GeneticAlgorithm  extends Algorithm {
     @Override
     public void solve() {
         this.population = initPopulation(chromosomeLength);
-        System.out.println("wtf");
 
         evaluatePopulation(this.population);
         int generationsCounter = 0;
@@ -43,10 +42,9 @@ public class GeneticAlgorithm  extends Algorithm {
             this.population = crossoverPopulation(this.population);
             this.population = mutatePopulation(this.population);
             evaluatePopulation(this.population);
-            // System.out.println("Iteration: " + generationsCounter + "\nTotal Points: " + currentValue + "\n");
+            System.out.println("Iteration: " + generationsCounter + "\nTotal Points: " + currentValue + "\n");
         }
 
-        System.out.println("bye dude");
 
         Individual individual = this.population.getFittest(0);
         int[] chromosome = individual.getChromosome();
