@@ -50,4 +50,38 @@ public class PointsEvaluator implements EvaluateFunction<Solution> {
 
     return points;
   }
+
+  /**
+   * Given a list of cars calculates which rides have bonus
+   *
+   * @param list of cars
+   * @return the ID of rides with bonus
+   */
+  public static HashSet<Integer> getRideWithBonus(List<Car> cars) {
+
+    HashSet<Integer> bonusCardId = new HashSet<Integer>();
+
+    for (Car car : cars) {
+      List<Ride> rides = car.getAssignedRides();
+
+      if (rides.size() == 0)
+        continue;
+
+      int time = 0, i;
+      Position pos = new Position(0, 0);
+
+      for (i = 0; i < rides.size() - 1; ++i) {
+        int distance = rides.get(i).getDistance();
+        Position newPos = rides.get(i).getStart();
+        time += pos.getDistanceTo(newPos) + distance;
+        pos = newPos;
+
+        if (time <= rides.get(i + 1).getEarliestStart()) {
+          bonusCardId.add(rides.get(i).id);
+        }
+      }
+
+    }
+    return bonusCardId;
+  }
 }
