@@ -1,23 +1,39 @@
 package genetic_algorithm;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.SortedSet;
-import java.util.TreeSet;
-
-import common.Solution;
-import common.evaluate_function.EvaluateFunction;
-import common.evaluate_function.PointsEvaluator;
+import java.util.Arrays;
+import java.util.Random;
 
 public class Population {
-    private SortedSet<Solution> population;
-    private EvaluateFunction<Solution> evaluateFunction = new PointsEvaluator();
+    private Individual population[];
     private double populationFitness = -1;
 
-    public Population() {
-        Comparator<Solution> comparator = (ps1, ps2) -> evaluateFunction.evaluate(ps1)
-					- evaluateFunction.evaluate(ps2);
-        this.population = new TreeSet<>(comparator);
+    /**
+     * Initializes blank population of individuals
+     *
+     * @param populationSize The size of the population
+     */
+    public Population(int populationSize) {
+        // Initial population
+        this.population = new Individual[populationSize];
+    }
+
+    /**
+     * Initializes population of individuals
+     *
+     * @param populationSize   The size of the population
+     * @param chromosomeLength The length of the individuals chromosome
+     */
+    public Population(int populationSize, int chromosomeLength) {
+        // Initial population
+        this.population = new Individual[populationSize];
+
+        // Loop over population size
+        for (int individualCount = 0; individualCount < populationSize; individualCount++) {
+            // Create individual
+            Individual individual = new Individual(chromosomeLength);
+            // Add individual to population
+            this.population[individualCount] = individual;
+        }
     }
 
     /**
@@ -25,13 +41,9 @@ public class Population {
      *
      * @return individuals Individuals in population
      */
-    public SortedSet<Solution> getIndividuals() {
+    public Individual[] getIndividuals() {
         return this.population;
     }
-
-	public void addIndividual(Solution individual) {
-        this.population.add(individual);
-	}
 
     /**
      * Find fittest individual in the population
@@ -39,9 +51,19 @@ public class Population {
      * @param offset
      * @return individual Fittest individual at offset
      */
-    public Solution getFittest(int offset) {
+    public Individual getFittest(int offset) {
+        // Order population by fitness
+        Arrays.sort(this.population, (o1, o2) -> {
+            if (o1.getFitness() > o2.getFitness()) {
+                return -1;
+            } else if (o1.getFitness() < o2.getFitness()) {
+                return 1;
+            }
+            return 0;
+        });
+
         // Return the fittest individual
-        return new ArrayList<>(this.population).get(offset);
+        return this.population[offset];
     }
 
     /**
@@ -68,6 +90,43 @@ public class Population {
      * @return size The population's size
      */
     public int size() {
-        return this.population.size();
+        return this.population.length;
+    }
+
+    /**
+     * Set individual at offset
+     *
+     * @param individual
+     * @param offset
+     * @return individual
+     */
+    public Individual setIndividual(int offset, Individual individual) {
+        return population[offset] = individual;
+    }
+
+    /**
+     * Get individual at offset
+     *
+     * @param offset
+     * @return individual
+     */
+    public Individual getIndividual(int offset) {
+        return population[offset];
+
+    }
+
+    /**
+     * Shuffles the population
+     *
+     * @return void
+     */
+    public void shuffle() {
+        Random rnd = new Random();
+        for (int i = population.length - 1; i > 0; i--) {
+            int index = rnd.nextInt(i + 1);
+            Individual a = population[index];
+            population[index] = population[i];
+            population[i] = a;
+        }
     }
 }

@@ -7,6 +7,13 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
@@ -59,6 +66,9 @@
       <workItem from="1585653168393" duration="1006000" />
       <workItem from="1585654221742" duration="7923000" />
       <workItem from="1585663201600" duration="20286000" />
+      <workItem from="1585690031929" duration="871000" />
+      <workItem from="1585690942918" duration="117000" />
+      <workItem from="1585691110561" duration="3917000" />
     </task>
     <servers />
   </component>
@@ -74,10 +84,10 @@
       <screen x="0" y="0" width="1504" height="1003" />
     </state>
     <state x="345" y="160" key="#Notifications/0.0.1504.1003@0.0.1504.1003" timestamp="1585644923575" />
-    <state x="483" y="249" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1585659198468">
+    <state x="483" y="249" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1585692717368">
       <screen x="0" y="0" width="1504" height="1003" />
     </state>
-    <state x="483" y="249" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1504.1003@0.0.1504.1003" timestamp="1585659198468" />
+    <state x="483" y="249" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1504.1003@0.0.1504.1003" timestamp="1585692717368" />
     <state x="533" y="256" key="FileChooserDialogImpl" timestamp="1585644879084">
       <screen x="0" y="0" width="1504" height="1003" />
     </state>
@@ -106,9 +116,13 @@
       <screen x="0" y="0" width="1504" height="1003" />
     </state>
     <state x="483" y="268" key="extract.method.dialog/0.0.1504.1003@0.0.1504.1003" timestamp="1585652872160" />
-    <state x="409" y="155" width="672" height="676" key="search.everywhere.popup" timestamp="1585670271793">
+    <state x="460" y="130" key="refactoring.ChangeSignatureDialog" timestamp="1585694053261">
       <screen x="0" y="0" width="1504" height="1003" />
     </state>
-    <state x="409" y="155" width="672" height="676" key="search.everywhere.popup/0.0.1504.1003@0.0.1504.1003" timestamp="1585670271793" />
+    <state x="460" y="130" key="refactoring.ChangeSignatureDialog/0.0.1504.1003@0.0.1504.1003" timestamp="1585694053261" />
+    <state x="409" y="155" width="672" height="676" key="search.everywhere.popup" timestamp="1585691439304">
+      <screen x="0" y="0" width="1504" height="1003" />
+    </state>
+    <state x="409" y="155" width="672" height="676" key="search.everywhere.popup/0.0.1504.1003@0.0.1504.1003" timestamp="1585691439304" />
   </component>
 </project>
