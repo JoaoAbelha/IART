@@ -23,6 +23,8 @@ import model.Ride;
 import simulated_annealing.SimulatedAnnealing;
 import tabu_search.TabuSearch;
 
+import static java.lang.System.exit;
+
 public class Menu {
 
     public static int errorStatus = 1;
@@ -40,7 +42,7 @@ public class Menu {
 
         if (args.length != 1) {
             System.out.println("Usage java Menu <file in the resources> ");
-            System.exit(errorStatus);
+            exit(errorStatus);
         }
 
 
@@ -60,6 +62,18 @@ public class Menu {
 
     }
 
+    private void printMenu() {
+        System.out.println("========================================================");
+        System.out.println("1 - Hill Climbing");
+        System.out.println("2 - Hill Climbing Steepest Ascent");
+        System.out.println("3 - Simulated Annealing");
+        System.out.println("4 - Tabu Search");
+        System.out.println("5 - Genetic Algorithm");
+        System.out.println("0 - Exit");
+        System.out.println("========================================================");
+        System.out.print("Option: ");
+    }
+
     /**
      * Lets user chose with algorithm to use
      *
@@ -69,47 +83,46 @@ public class Menu {
         evaluateFunction = new PointsEvaluator();
         Solution initialSolution = null, optimalSolution = null;
         Neighborhood<Solution> neighborhood;
-
-        System.out.println("========================================================");
-        System.out.println("1 - Hill Climbing");
-        System.out.println("2 - Hill Climbing Steepest Ascent");
-        System.out.println("3 - Simulated Annealing");
-        System.out.println("4 - Tabu Search");
-        System.out.println("5 - Genetic Algorithm");
-        System.out.println("========================================================");
-        System.out.print("Option: ");
-
+        printMenu();
 
         Scanner myInput = new Scanner(System.in);
 
-        switch (myInput.nextInt()) {
-            case 1:
-                 initialSolution = this.initialSolution().initialSolution(this.problem);
-                 neighborhood = this.neighborhood();
-                optimalSolution = new HillClimbing(evaluateFunction, neighborhood).solve(initialSolution);
-                break;
-            case 2:
-                initialSolution = this.initialSolution().initialSolution(this.problem);
-                neighborhood = this.neighborhood();
-                optimalSolution =new SAHillClimbing(evaluateFunction, neighborhood).solve(initialSolution);
-                break;
-            case 3:
-                initialSolution = this.initialSolution().initialSolution(this.problem);
-                neighborhood = this.neighborhood();
-                optimalSolution =new SimulatedAnnealing(evaluateFunction, neighborhood).solve(initialSolution);
-                break;
-            case 4:
-                initialSolution = this.initialSolution().initialSolution(this.problem);
-                neighborhood = this.neighborhood();
-                optimalSolution =new TabuSearch(evaluateFunction, neighborhood).solve(initialSolution);
-                break;
-            case 5:
-                MutationOperator mutation = new MutationOperator();
-                PopulationGenerator populationGenerator = new PopulationGenerator(new RandomSolutionGenerator(), 10);
-               optimalSolution = new GeneticAlgorithm(mutation);
-                break;
-            default:
-                break;
+        while(true) {
+            switch (myInput.nextInt()) {
+                case 1:
+                    initialSolution = this.initialSolution().initialSolution(this.problem);
+                    neighborhood = this.neighborhood();
+                    optimalSolution = new HillClimbing(evaluateFunction, neighborhood).solve(initialSolution);
+                    break;
+                case 2:
+                    initialSolution = this.initialSolution().initialSolution(this.problem);
+                    neighborhood = this.neighborhood();
+                    optimalSolution =new SAHillClimbing(evaluateFunction, neighborhood).solve(initialSolution);
+                    break;
+                case 3:
+                    initialSolution = this.initialSolution().initialSolution(this.problem);
+                    neighborhood = this.neighborhood();
+                    optimalSolution =new SimulatedAnnealing(evaluateFunction, neighborhood).solve(initialSolution);
+                    break;
+                case 4:
+                    initialSolution = this.initialSolution().initialSolution(this.problem);
+                    neighborhood = this.neighborhood();
+                    optimalSolution =new TabuSearch(evaluateFunction, neighborhood).solve(initialSolution);
+                    break;
+                case 5:
+                    MutationOperator mutation = new MutationOperator();
+                    // PopulationGenerator populationGenerator = new PopulationGenerator(new RandomSolutionGenerator(), 10);
+                    // optimalSolution = new GeneticAlgorithm(mutation);
+                    break;
+                case 0:
+                    System.out.println("Goodbye!\n\n");
+                    exit(0);
+                default:
+                    System.out.println("Invalid Option, please try again!\n\n");
+                    printMenu();
+                    continue;
+            }
+            break;
         }
 
         this.problem.setSolution(optimalSolution);
@@ -214,14 +227,14 @@ public class Menu {
             String line = br.readLine();
             if (line == null) {
                 System.out.println("The file is empty");
-                System.exit(errorStatus);
+                exit(errorStatus);
             }
 
             /*parse global problem variables*/
             String[] values = line.split(" ");
 
             if (values.length != 6) {
-                System.exit(errorStatus);
+                exit(errorStatus);
             }
 
             row = Integer.valueOf(values[0]);
@@ -249,7 +262,7 @@ public class Menu {
 
             if (rides.size() != nrRides) {
                 System.out.println("Size mismatch in number of rides");
-                System.exit(1);
+                exit(1);
             }
 
             this.problem = new Problem(nrCars, rides, steps, bonus);

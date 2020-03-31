@@ -1,6 +1,7 @@
 package genetic_algorithm;
 
 import common.Problem;
+import common.initial_solution.RandomSolutionGenerator;
 import model.Position;
 import model.Ride;
 
@@ -11,7 +12,7 @@ import java.util.Random;
 public class PopulationGenerator {
     private int populationSize;
 
-    public PopulationGenerator(int populationSize) {
+    public PopulationGenerator(RandomSolutionGenerator randomSolutionGenerator, int populationSize) {
         this.populationSize = populationSize;
     }
 
@@ -94,20 +95,23 @@ public class PopulationGenerator {
   }
 
   private int getPreviousRide(int vehicleID, int rideID, Problem problem) {
-    int[] vehicleRides = state[vehicleID];
+    //int[] vehicleRides = state[vehicleID];
     for (int i = rideID; i > 0; i--) {
-      if (vehicleRides[i] == 1)
+     // if (vehicleRides[i] == 1)
         return i;
     }
     return -1;
   }
 
   private int getNextRide(int vehicleID, int rideID) {
+        /*
     int[] vehicleRides = state[vehicleID];
     for (int i = rideID; i > vehicleRides.length; i++) {
       if (vehicleRides[i] == 1)
         return i;
     }
+    */
+
     return -1;
   }
 
