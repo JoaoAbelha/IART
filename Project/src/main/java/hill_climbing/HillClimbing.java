@@ -7,6 +7,8 @@ import common.neighborhood.Neighborhood;
 import model.Car;
 import model.Ride;
 
+import java.util.List;
+
 public class HillClimbing extends Algorithm<Solution> {
   final private int MAX_ITERATIONS = 100000;
   private EvaluateFunction<Solution> evaluateFunction;
@@ -28,16 +30,21 @@ public class HillClimbing extends Algorithm<Solution> {
       System.out.println("-----------------------------------------------------------");
       System.out.format("iter %d: %d\n", iter, evaluateFunction.evaluate(globalBest));
       System.out.println("-----------------------------------------------------------");
+      int counter = 0;
       for (Solution neighbor : neighborhood.neighbors(globalBest)) {
         if(neighbor != null) {
           int neighborValue = evaluateFunction.evaluate(neighbor);
           if(neighborValue > bestValue) {
             globalBest = neighbor;
             bestValue = neighborValue;
+            counter++;
             break;
           }
         }
       }
+      if (counter == 0)
+        return globalBest;
+
       iter++;
       values.add(bestValue);
     }

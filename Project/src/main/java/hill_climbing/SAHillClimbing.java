@@ -35,8 +35,11 @@ public class SAHillClimbing extends Algorithm<Solution> {
         if (bestNeighborValue > bestValue) {
           globalBest = bestNeighbor;
           bestValue = bestNeighborValue;
-        }
-      }
+        } else
+          return globalBest;
+      } else
+        return globalBest;
+
       iteration++;
       values.add(bestValue);
     }

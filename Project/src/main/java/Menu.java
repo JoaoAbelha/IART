@@ -55,7 +55,7 @@ public class Menu {
     /*TODO: complete the menu*/
     private Algorithm<Solution> mainMenu() {
         PointsEvaluator evaluateFunction = new PointsEvaluator();
-        SwapNeighborhood neighborhood = new SwapNeighborhood();
+        AssignNeighborhood neighborhood = new AssignNeighborhood();
 
         System.out.println("========================================================");
         System.out.println("1 - Hill Climbing");

@@ -36,7 +36,6 @@ public class AssignNeighborhood implements Neighborhood<Solution> {
             if (currI < solution.getState().size()) {
                 return true;
             } else {
-                System.out.println("acabou");
                 return false;
             }
         }
