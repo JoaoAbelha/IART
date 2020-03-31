@@ -53,6 +53,7 @@ public class SimulatedAnnealing extends Algorithm<Solution> {
       }
 
       temperature *= (1 - coolingRate);
+      iteration++;
       values.add(globalSolution);
     }
 

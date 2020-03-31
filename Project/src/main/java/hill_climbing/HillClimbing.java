@@ -22,13 +22,12 @@ public class HillClimbing extends Algorithm<Solution> {
 
   @Override
   public Solution solve(Solution initialSolution) {
-    int iter = 0;
     Solution globalBest = initialSolution;
     values.add(evaluateFunction.evaluate(globalBest));
-    while (iter < MAX_ITERATIONS) {
+    while (iteration < MAX_ITERATIONS) {
       int bestValue = evaluateFunction.evaluate(globalBest);
       System.out.println("-----------------------------------------------------------");
-      System.out.format("iter %d: %d\n", iter, evaluateFunction.evaluate(globalBest));
+      System.out.format("iter %d: %d\n", iteration, evaluateFunction.evaluate(globalBest));
       System.out.println("-----------------------------------------------------------");
       int counter = 0;
       for (Solution neighbor : neighborhood.neighbors(globalBest)) {
@@ -45,7 +44,7 @@ public class HillClimbing extends Algorithm<Solution> {
       if (counter == 0)
         return globalBest;
 
-      iter++;
+      iteration++;
       values.add(bestValue);
     }
 
