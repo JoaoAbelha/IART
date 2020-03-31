@@ -43,8 +43,12 @@ public class TabuSearch extends Algorithm<Solution> {
 				if (bestNeighborValue > bestValue) {
 					globalBest = bestNeighbor;
 					bestValue = bestNeighborValue;
-				}
-			}
+				} else
+					return globalBest;
+
+			} else
+				return globalBest;
+			
 			tabuList.update();
 			values.add(bestValue);
 			iteration++;
