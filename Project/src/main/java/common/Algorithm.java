@@ -19,33 +19,31 @@ public abstract class Algorithm<T> {
         final SwingWrapper<XYChart> sw = new SwingWrapper<XYChart>(chart);
         sw.displayChart();
 
-        Thread thread = new Thread() {
-            public void run() {
-                int counter = 0;
-                while (isRunning) {
-                    try {
-                        Thread.sleep(100);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    final double[][] data;
-
-                    if (counter < iteration) {
-                        counter++;
-                    }
-                    try {
-                        data = getValues(counter);
-                        chart.updateXYSeries("value", data[0], data[1], null);
-                        sw.repaintChart();
-                    } catch (IndexOutOfBoundsException e) {
-                        e.printStackTrace();
-                        System.out.println("cresfkea\nfaiwejfewia\ndkjewaid");
-                        return;
-                    }
-
+        Thread thread = new Thread(() -> {
+            int counter = 0;
+            while (isRunning) {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
+                final double[][] data;
+
+                if (counter < iteration) {
+                    counter++;
+                }
+                try {
+                    data = getValues(counter);
+                    chart.updateXYSeries("value", data[0], data[1], null);
+                    sw.repaintChart();
+                } catch (IndexOutOfBoundsException e) {
+                    e.printStackTrace();
+                    System.out.println("cresfkea\nfaiwejfewia\ndkjewaid");
+                    return;
+                }
+
             }
-        };
+        });
         thread.start();
     }
 
