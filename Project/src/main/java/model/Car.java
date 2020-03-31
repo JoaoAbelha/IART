@@ -42,9 +42,9 @@ public class Car {
 
     @Override
 	public Car clone() {
-        List<Ride> assigned = new ArrayList<>(this.assignedRides.size());
-        for(int i = 0; i < assigned.size(); ++i) {
-            assigned.set(i, this.assignedRides.get(i).clone());
+        List<Ride> assigned = new ArrayList<>();
+        for(int i = 0; i < assignedRides.size(); ++i) {
+            assigned.add(this.assignedRides.get(i).clone());
         }
 		return new Car(id, assigned, position.clone(), busyUntil);
 	}

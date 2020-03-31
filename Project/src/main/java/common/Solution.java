@@ -33,6 +33,10 @@ public class Solution {
       List<Ride> rides = car.getAssignedRides();
       int time = 0;
 
+      if(rides.size() > 0) {
+        time = rides.get(0).getStart().getDistanceTo(new Position(0,0));
+      }
+
       for (int i = 0; i < rides.size() - 1; ++i) {
         Ride ride = rides.get(i);
         Ride nextRide = rides.get(i + 1);
@@ -53,16 +57,16 @@ public class Solution {
 
   @Override
 	public Solution clone() {
-		List<Car> newState = new ArrayList<>(this.state.size());
-		for(int i = 0; i < newState.size(); ++i) {
-      newState.set(i, state.get(i).clone());
-    }
+		List<Car> newState = new ArrayList<>();
+		for(int i = 0; i < state.size(); ++i) {
+          newState.add(state.get(i).clone());
+        }
     
-    List<Ride> unassigned = new ArrayList<>(this.unassignedRides.size());
-    for(int i = 0; i < unassigned.size(); ++i) {
-      unassigned.set(i, unassignedRides.get(i).clone());
-    }
+        List<Ride> unassigned = new ArrayList<>();
+        for(int i = 0; i < unassignedRides.size(); ++i) {
+          unassigned.add(unassignedRides.get(i).clone());
+        }
+
 		return new Solution(newState, unassigned);
 	}
-
 }

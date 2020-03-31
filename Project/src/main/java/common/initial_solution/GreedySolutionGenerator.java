@@ -74,19 +74,9 @@ public class GreedySolutionGenerator implements InitialSolutionGenerator<Solutio
         continue;
       }
 
-      state.get(chosen.id - 1).addRide(rideToAssign);
       chosen.addRide(rideToAssign);
       unassignedRides.remove(rideToAssign);
       rideToAssign.assign();
-    }
-
-    for (Car car : state) {
-      System.out.println("Car: ");
-      for (Ride ride : car.getAssignedRides()) {
-        ride.print();
-        // score += car.score;
-      }
-      System.out.println("----------------------------");
     }
 
     return new Solution(state, unassignedRides);

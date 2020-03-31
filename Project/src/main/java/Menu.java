@@ -1,33 +1,32 @@
 import java.io.*;
 import java.net.URL;
 import java.util.*;
+
 import common.Algorithm;
 import common.Problem;
 import common.Solution;
+import common.evaluate_function.PointsEvaluator;
 import common.initial_solution.GreedySolutionGenerator;
+import common.initial_solution.RandomSolutionGenerator;
+import common.neighborhood.AssignNeighborhood;
+import hill_climbing.HillClimbing;
+import hill_climbing.SAHillClimbing;
 import model.Car;
 import model.Position;
 import model.Ride;
-
-/*
-*** Java graph library for dynamic visualisation:
-
-    JGraphT
-    JUNG
-    G
-    yWorks
-    BFG
-    GEF
-    gmgraphlib
-    Scene Graph
-    Piccolo2D
-    JGraph
-*
-* */
+import simulated_annealing.SimulatedAnnealing;
+import tabu_search.TabuSearch;
 
 public class Menu {
+
     public static int errorStatus = 1;
     public Problem problem;
+    private int row;
+    private int col;
+    private int nrCars;
+    private int nrRides;
+    private int bonus;
+    private int steps;
 
     public static void main(String[] args) {
 
@@ -48,16 +47,22 @@ public class Menu {
             System.out.println("Error while reading the file");
             e.printStackTrace();
         }
+
+
+
     }
 
     /*TODO: complete the menu*/
-    private Algorithm mainMenu() {
+    private Algorithm<Solution> mainMenu() {
+        PointsEvaluator evaluateFunction = new PointsEvaluator();
+        AssignNeighborhood neighborhood = new AssignNeighborhood();
 
         System.out.println("========================================================");
         System.out.println("1 - Hill Climbing");
         System.out.println("2 - Hill Climbing Steepest Ascent");
         System.out.println("3 - Simulated Annealing");
         System.out.println("4 - Tabu Search");
+        System.out.println("5 - Genetic Algorithm");
         System.out.println("========================================================");
         System.out.print("Option: ");
 
@@ -66,15 +71,17 @@ public class Menu {
 
         switch (myInput.nextInt()) {
             case 1:
-                return new HC();
+                return new HillClimbing(evaluateFunction, neighborhood);
             case 2:
-                return new SAHC();
+                return new SAHillClimbing(evaluateFunction, neighborhood);
             case 3:
-                return new SA();
+                return new SimulatedAnnealing(evaluateFunction, neighborhood);
             case 4:
-                return new TS();
+                return new TabuSearch(evaluateFunction, neighborhood);
+            /*case 5:
+                return new GeneticAlgorithm(10, nrRides, 0.001, 0.7, 5, 5, 1000);
             default:
-                break;
+                break;*/
         }
 
         return null;
@@ -85,8 +92,7 @@ public class Menu {
     private File getFileFromResources(String fileName) {
 
         ClassLoader classLoader = getClass().getClassLoader();
-
-        URL resource = classLoader.getResource(fileName);
+        URL resource = classLoader.getResource("b_should_be_easy.in");
         if (resource == null) {
             throw new IllegalArgumentException("file is not found!");
         } else {
@@ -114,13 +120,6 @@ public class Menu {
 
         if (file == null) return;
         List<Ride> rides = new ArrayList<>();
-        int row;
-        int col;
-        int nrCars;
-        int nrRides;
-        int bonus;
-        int steps;
-
 
         try (FileReader reader = new FileReader(file);
              BufferedReader br = new BufferedReader(reader)) {
@@ -168,14 +167,25 @@ public class Menu {
             }
 
             /*todo: validate positions accordingly to the number of rows and columns */
+            /*todo: validate positions accordingly to the number of rows and columns */
             this.problem = new Problem(nrCars, rides, steps, bonus);
+            GreedySolutionGenerator initialSolutionGenerator = new GreedySolutionGenerator();
+            this.problem.setSolution(initialSolutionGenerator.initialSolution(this.problem));
+            for(Car car : this.problem.getSolution().getState()) {
+                System.out.println("Car " + car.id);
+                for(Ride ride : car.getAssignedRides()) {
+                    ride.print();
+                }
+            }
+            if(this.problem.getSolution().isValid()) {
+                System.out.println("valid");
+            }
             System.out.println("Created the problem");
-            GreedySolutionGenerator greedySolutionGenerator = new GreedySolutionGenerator();
-            this.problem.setSolution(greedySolutionGenerator.initialSolution(this.problem));
+
             System.out.println("Trying to create a better solution...");
-            this.problem.solve();
-            System.out.println("Not assigned rides: " + this.problem.rides.size());
-            System.out.println("Total Points: " + this.problem.evaluate(this.problem.getState()));
+            Solution optimalSolution = this.mainMenu().solve(this.problem.getSolution());
+            System.out.println("Not assigned rides: " + optimalSolution.getUnassignedRides().size());
+            //System.out.println("Total Points: " + this.problem.evaluate(this.problem.getState()));
             outputFile();
         }
     }

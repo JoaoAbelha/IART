@@ -5,47 +5,52 @@ import common.Solution;
 import common.evaluate_function.EvaluateFunction;
 import common.neighborhood.Neighborhood;
 
-public class TabuSearch implements Algorithm<Solution> {
-    final private int TENURE = 10;
-    final private int MAX_ITERATIONS = 100000;
-    private TabuList<Solution> tabuList = new TabuList<>();
-    private EvaluateFunction<Solution> evaluateFunction;
-    private Neighborhood<Solution> neighborhood;
+public class TabuSearch extends Algorithm<Solution> {
+	final private int TENURE = 10;
+	final private int MAX_ITERATIONS = 100000;
+	private TabuList<Solution> tabuList = new TabuList<>();
+	private EvaluateFunction<Solution> evaluateFunction;
+	private Neighborhood<Solution> neighborhood;
 
-    public TabuSearch(EvaluateFunction<Solution> evaluateFunction, Neighborhood<Solution> neighborhood) {
-        this.evaluateFunction = evaluateFunction;
-        this.neighborhood = neighborhood;
-    }
+	public TabuSearch(EvaluateFunction<Solution> evaluateFunction, Neighborhood<Solution> neighborhood) {
+		super();
+		this.evaluateFunction = evaluateFunction;
+		this.neighborhood = neighborhood;
+	}
 
-    @Override
-    public Solution solve(Solution initialSolution) {
-        int iter = 0;
-        tabuList.clear();
-		Solution localBest = initialSolution;
+	@Override
+	public Solution solve(Solution initialSolution) {
+		int iter = 0;
+		tabuList.clear();
 		Solution globalBest = initialSolution;
 		while (iter < MAX_ITERATIONS) {
-			System.out.format("iter %d: %d\n", iter, evaluateFunction.evaluate(globalBest));
+			int bestValue = evaluateFunction.evaluate(globalBest);
+			System.out.format("iter %d: %d\n", iter, bestValue);
 			Solution bestNeighbor = null;
-			for (Solution neighbor : neighborhood.neighbors(localBest)) {
+
+			for (Solution neighbor : neighborhood.neighbors(globalBest)) {
 				if (!tabuList.contains(neighbor)) {
-					if (neighbor == null ||
-							((neighbor != null) && evaluateFunction.evaluate(neighbor) < evaluateFunction.evaluate(localBest))) {
+					if (bestNeighbor == null) {
+						bestNeighbor = neighbor;
+					} else if ((neighbor != null)
+							&& evaluateFunction.evaluate(neighbor) > evaluateFunction.evaluate(bestNeighbor)) {
 						bestNeighbor = neighbor;
 					}
-				}
+				} else System.out.println("contains");
 			}
 			if (bestNeighbor != null) {
-				// System.out.println(evalFunc.evaluate(bestNeighbor));
-				localBest = bestNeighbor;
-				tabuList.add(localBest, TENURE);
-				if (evaluateFunction.evaluate(localBest) <= evaluateFunction.evaluate(globalBest)) {
-					globalBest = localBest;
+				tabuList.add(bestNeighbor, TENURE);
+				int bestNeighborValue = evaluateFunction.evaluate(bestNeighbor);
+				if (bestNeighborValue > bestValue) {
+					globalBest = bestNeighbor;
+					bestValue = bestNeighborValue;
 				}
 			}
 			tabuList.update();
+			values.add(bestValue);
 			iter++;
 		}
-			
+
 		return globalBest;
-    }
+	}
 }

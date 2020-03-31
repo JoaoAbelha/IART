@@ -11,6 +11,9 @@ import model.Ride;
 public class PointsEvaluator implements EvaluateFunction<Solution> {
   @Override
   public int evaluate(Solution solution) {
+    if(!solution.isValid())
+      return -1;
+
     int points = 0;
 
     for (Car car : solution.getState()) {
