@@ -213,6 +213,52 @@ public class Menu {
         }
         fileWriter.close();
     }
+    /**
+     * Outputs to a JSON file the solution
+     *
+     * @throws IOException
+     */
+    private void outputJSON() throws IOException {
+        Writer fileWriter = new FileWriter("output.json", false);
+        List<Car> state = problem.getSolution().getState();
+        HashSet<Integer> bonus = PointsEvaluator.getRideWithBonus(state);
+        fileWriter.write("{\"row\": " + this.row + ", \"column\" :" + this.col + ",\"rides\":[");
+
+        for(int i = 0 ; i < state.size()- 1 ; i++) {
+            Car car = state.get(i);
+            String carRides = "[";
+            for(Ride ride : car.getAssignedRides()) {
+                carRides += " " + ride.getStart().getX() + ", " + ride.getStart().getY() +", " + ride.getEnd().getX() + ", " + ride.getEnd().getY();
+                if (bonus.contains(ride.id)) {
+                    carRides+= ", 101";
+                }
+                else {
+                    carRides+=", 1";
+                }
+
+            }
+            fileWriter.write(carRides);
+            fileWriter.write("],");
+        }
+
+        Car car = state.get(state.size()-1);
+        String carRides = "[";
+        for(Ride ride : car.getAssignedRides()) {
+            carRides += " " + ride.getStart().getX() + ", " + ride.getStart().getY() +", " + ride.getEnd().getX() + ", " + ride.getEnd().getY();
+            if (bonus.contains(ride.id)) {
+                carRides+= ", 101";
+            }
+            else {
+                carRides+=", 1";
+            }
+        }
+        fileWriter.write(carRides);
+        fileWriter.write("]");
+
+        fileWriter.write("]}");
+        fileWriter.close();
+    }
+
 
     /**
      * Parses file with the representation of the problem
