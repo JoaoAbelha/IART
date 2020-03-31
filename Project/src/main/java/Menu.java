@@ -181,7 +181,21 @@ public class Menu {
             System.out.println("Non assigned rides: " + this.problem.rides.size());
             System.out.println("Total Points: " + this.problem.evaluate(this.problem.getState()));
             System.out.println("Execution Time(ms): " + estimatedTime/1000000);
+            outputCsv();
             outputFile();
         }
+    }
+
+    private void outputCsv() throws IOException {
+        FileWriter csvWriter = new FileWriter("out.csv");
+        double[][] values = this.problem.getValues(this.problem.iteration);
+        for (int i = 0; i < this.problem.iteration; i++) {
+            csvWriter.append(Integer.toString(i));
+            csvWriter.append(",");
+            csvWriter.append(Integer.toString(this.problem.values.get(i)));
+            csvWriter.append("\n");
+        }
+        csvWriter.flush();
+        csvWriter.close();
     }
 }

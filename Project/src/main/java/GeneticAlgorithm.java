@@ -43,6 +43,7 @@ public class GeneticAlgorithm  extends Algorithm {
             this.population = mutatePopulation(this.population);
             evaluatePopulation(this.population);
             // System.out.println("Iteration: " + generationsCounter + "\nTotal Points: " + currentValue + "\n");
+            iteration++;
             values.add(currentValue);
         }
 

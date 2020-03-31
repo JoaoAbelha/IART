@@ -29,7 +29,7 @@ public abstract class Algorithm {
     protected List<Integer> values = new ArrayList<>();
     double[][] initdata = new double[][] {{1}, {1}};
     boolean isRunning = true;
-    int iteration = 0;
+    public int iteration = 0;
 
 
     Algorithm() {
@@ -79,7 +79,7 @@ public abstract class Algorithm {
 
     }
 
-    private double[][] getValues(int counter) {
+    public double[][] getValues(int counter) {
         double[] xData = new double[counter];
         double[] yData = new double[counter];
         for (int i = 0; i < counter; i++) {
