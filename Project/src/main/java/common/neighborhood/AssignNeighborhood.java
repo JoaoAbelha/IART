@@ -1,106 +1,133 @@
 package common.neighborhood;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
+import common.Problem;
 import common.Solution;
+import genetic_algorithm.GeneticAlgorithm;
+import genetic_algorithm.Population;
+import model.Car;
 import model.Position;
 import model.Ride;
 
 public class AssignNeighborhood implements Neighborhood<Solution> {
-  @Override
-  public Iterable<Solution> neighbors(Solution solution) {
-    return new IterableNeighborhood(solution);
-  }
-
-  private class NeighborhoodItarator implements Iterator<Solution> {
-    private int currI;
-    private int currJ;
-    private int currM;
-    private final Solution solution;
-
-    public NeighborhoodItarator(Solution solution) {
-      currI = 0;
-      currJ = 0;
-      currM = 0;
-      this.solution = solution;
-    }
-
     @Override
-    public boolean hasNext() {
-      if (currJ < solution.getUnassignedRides().size()) {
-        return true;
-      } else {
-        return false;
-      }
+    public Iterable<Solution> neighbors(Solution solution) {
+        return new IterableNeighborhood(solution);
     }
 
-    @Override
-    public Solution next() {
-      Solution neighbor = solution.clone();
-      boolean assigned = this.assignRide(neighbor);
+    private class NeighborhoodItarator implements Iterator<Solution> {
+        private final double UNASSIGN_PROBABILITY = 0.3333;
+        private int currI;
+        private int currJ;
+        private final Solution solution;
 
-      // update neighborhood index
-      if(currM + 1 > neighbor.getState().get(currI).getAssignedRides().size() - 1) {
-        currI++;
-        currM = 0;
-      } else {
-        currM++;
-      }
-      if(currI + 1 > neighbor.getState().size() - 1) {
-        currJ++;
-        currI = 0;
-      }
+        public NeighborhoodItarator(Solution solution) {
+            currI = 0;
+            currJ = 0;
+            this.solution = solution;
+        }
 
-      if(assigned) {
-        return neighbor;
-      } else return null;
+        @Override
+        public boolean hasNext() {
+            if (currI < solution.getState().size()) {
+                return true;
+            } else {
+                System.out.println("acabou");
+                return false;
+            }
+        }
+
+        @Override
+        public Solution next() {
+            Solution neighbor = this.solution.clone();
+            this.assignRide(neighbor);
+
+            if(currJ + 1 > solution.getUnassignedRides().size() - 1) {
+                currI++;
+                currJ = 0;
+            } else {
+                currJ++;
+            }
+
+            return neighbor;
+        }
+
+        private void assignRide(Solution neighbor) {
+            int assignedRidesSize = neighbor.getState().get(currI).getAssignedRides().size();
+            if ((neighbor.getUnassignedRides().size() > 0) && (Math.random() > UNASSIGN_PROBABILITY)) {
+                this.tryAssignRides(neighbor);
+            } else if (assignedRidesSize > 0) {
+                int random = (int) (Math.random() * assignedRidesSize);
+                Ride ride = neighbor.getState().get(currI).getAssignedRides().remove(random);
+                neighbor.getUnassignedRides().add(ride);
+            }
+        }
+
+        private void tryAssignRides(Solution solution) {
+            Car car = solution.getState().get(currI);
+            Ride unassignedRide = solution.getUnassignedRides().get(currJ);
+            int rand = (int) Math.random() * car.getAssignedRides().size();
+            car.getAssignedRides().add(rand, unassignedRide);
+
+            if(solution.isValid()) {
+                solution.getUnassignedRides().remove(unassignedRide);
+            } else {
+                car.getAssignedRides().remove(unassignedRide);
+            }
+        }
+
+
+
+        private int[] getBestReplacement(List<Ride> assignedRides, Ride ride) {
+            int indexs[] = {0, assignedRides.size() - 1};
+            int time = 0, i = 0;
+
+            for (; i < assignedRides.size() - 1; ++i) {
+                Ride r = assignedRides.get(i);
+                Position ridePos = r.getEnd();
+                Position nextRidePos = ride.getStart();
+
+                time += r.getDistance() + ridePos.getDistanceTo(nextRidePos);
+                int latestStart = ride.getLastestFinish() - ride.getDistance();
+
+                if (time > latestStart) {
+                  break;
+                } else indexs[0] = i;
+            }
+
+            for (; i < assignedRides.size() - 1; ++i) {
+              Ride nextRide = assignedRides.get(i + 1);
+              Position ridePos = ride.getEnd();
+              Position nextRidePos = nextRide.getStart();
+
+              time += ride.getDistance() + ridePos.getDistanceTo(nextRidePos);
+              int latestStart = ride.getLastestFinish() - ride.getDistance();
+
+              if (time > latestStart) {
+                indexs[1] = i;
+              } else break;
+            }
+
+            return indexs;
+        }
     }
 
-    private boolean assignRide(Solution neighbor) {
-      Ride unassignedRide = neighbor.getUnassignedRides().get(currJ);
-      List<Ride> currCarRides = neighbor.getState().get(currI).getAssignedRides();
-      currCarRides.add(currM, unassignedRide);
 
-      if(neighbor.isValid()) {
-        neighbor.getUnassignedRides().remove(unassignedRide);
-        return true;
-      } else {
-        currCarRides.remove(unassignedRide);
-        return false;
-      }
+    private class IterableNeighborhood implements Iterable<Solution> {
+        private final Solution solution;
+
+        public IterableNeighborhood(Solution solution) {
+            this.solution = solution;
+        }
+
+        @Override
+        public Iterator<Solution> iterator() {
+            return new NeighborhoodItarator(solution);
+
+        }
     }
-  }
-
-  private class IterableNeighborhood implements Iterable<Solution> {
-    private final Solution solution;
-
-    public IterableNeighborhood(Solution solution) {
-      this.solution = solution;
-    }
-
-    @Override
-    public Iterator<Solution> iterator() {
-      return new NeighborhoodItarator(solution);
-
-    }
-  }
-  /*
-   * @Override public Solution neighbors(Solution solution) {
-   * 
-   * List<Ride> unassignedRides = solution.getUnassignedRides();
-   * 
-   * for (Ride ride : unassignedRides) { int rideID = ride.id; for (int i = 0; i <
-   * state.length; i++) { int[] car = state[i]; if (car[rideID - 1] == 0) { if
-   * (validAssignment(i, rideID - 1)) { state[i][rideID - 1] = 1;
-   * rides.remove(ride);
-   * 
-   * // create new node (state) // int newNodeId = ++nodeCounter; //
-   * graph.addNode(Integer.toString(newNodeId)); //
-   * graph.addEdge(Integer.toString(newNodeId), Integer.toString(newNodeId), //
-   * Integer.toString(currentNode)); // currentNode = newNodeId;
-   * 
-   * return state; } } } } System.out.println("Did not found new state"); return
-   * null; }
-   */
 }

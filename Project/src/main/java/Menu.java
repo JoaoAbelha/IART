@@ -7,8 +7,8 @@ import common.Problem;
 import common.Solution;
 import common.evaluate_function.PointsEvaluator;
 import common.initial_solution.GreedySolutionGenerator;
-import common.initial_solution.RandomSolutionGenerator;
 import common.neighborhood.AssignNeighborhood;
+import common.neighborhood.SwapNeighborhood;
 import hill_climbing.HillClimbing;
 import hill_climbing.SAHillClimbing;
 import model.Car;
@@ -55,7 +55,7 @@ public class Menu {
     /*TODO: complete the menu*/
     private Algorithm<Solution> mainMenu() {
         PointsEvaluator evaluateFunction = new PointsEvaluator();
-        AssignNeighborhood neighborhood = new AssignNeighborhood();
+        SwapNeighborhood neighborhood = new SwapNeighborhood();
 
         System.out.println("========================================================");
         System.out.println("1 - Hill Climbing");
@@ -171,14 +171,9 @@ public class Menu {
             this.problem = new Problem(nrCars, rides, steps, bonus);
             GreedySolutionGenerator initialSolutionGenerator = new GreedySolutionGenerator();
             this.problem.setSolution(initialSolutionGenerator.initialSolution(this.problem));
+            System.out.println(this.problem.getSolution().getState().size());
             for(Car car : this.problem.getSolution().getState()) {
-                System.out.println("Car " + car.id);
-                for(Ride ride : car.getAssignedRides()) {
-                    ride.print();
-                }
-            }
-            if(this.problem.getSolution().isValid()) {
-                System.out.println("valid");
+                System.out.println(car.getAssignedRides().size());
             }
             System.out.println("Created the problem");
 

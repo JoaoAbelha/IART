@@ -1,8 +1,8 @@
 package common;
-
+/*
 import org.knowm.xchart.QuickChart;
 import org.knowm.xchart.SwingWrapper;
-import org.knowm.xchart.XYChart;
+import org.knowm.xchart.XYChart;*/
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,7 +16,7 @@ public abstract class Algorithm<T> {
 
     public Algorithm() {
         // Create Chart
-        final XYChart chart = QuickChart.getChart("Value per Iteration", "Iteration", "Value", "value", initdata[0], initdata[1]);
+        /*final XYChart chart = QuickChart.getChart("Value per Iteration", "Iteration", "Value", "value", initdata[0], initdata[1]);
         final SwingWrapper<XYChart> sw = new SwingWrapper<XYChart>(chart);
         sw.displayChart();
 
@@ -48,7 +48,7 @@ public abstract class Algorithm<T> {
                 }
             }
         };
-        thread.start();
+        thread.start();*/
     }
 
     private double[][] getValues(int counter) {

@@ -29,11 +29,13 @@ public class HillClimbing extends Algorithm<Solution> {
       System.out.format("iter %d: %d\n", iter, evaluateFunction.evaluate(globalBest));
       System.out.println("-----------------------------------------------------------");
       for (Solution neighbor : neighborhood.neighbors(globalBest)) {
-        int neighborValue = evaluateFunction.evaluate(neighbor);
-        if((neighbor != null) && neighborValue > bestValue) {
-          globalBest = neighbor;
-          bestValue = neighborValue;
-          break;
+        if(neighbor != null) {
+          int neighborValue = evaluateFunction.evaluate(neighbor);
+          if(neighborValue > bestValue) {
+            globalBest = neighbor;
+            bestValue = neighborValue;
+            break;
+          }
         }
       }
       iter++;

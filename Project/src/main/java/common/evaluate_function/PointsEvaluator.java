@@ -18,12 +18,16 @@ public class PointsEvaluator implements EvaluateFunction<Solution> {
 
     for (Car car : solution.getState()) {
       List<Ride> rides = car.getAssignedRides();
+
+      if(rides.size() == 0)
+        continue;
+
       int time = 0, i;
       Position pos = new Position(0, 0);
 
       for(i = 0; i < rides.size() - 1; ++i) {
-        int distance = rides.get(i).getDistance();
-        Position newPos = rides.get(i).getStart();
+          int distance = rides.get(i).getDistance();
+          Position newPos = rides.get(i).getStart();
         points += distance;
         time += pos.getDistanceTo(newPos) + distance;
         pos = newPos;

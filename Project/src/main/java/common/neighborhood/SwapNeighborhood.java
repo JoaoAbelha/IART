@@ -54,41 +54,24 @@ public class SwapNeighborhood implements Neighborhood<Solution> {
       } else {
         currJ++;
       }
-      
-      //two random indexs
-      int[] indexs = new Random().ints(2, 0, firstCarRides.size()).sorted().toArray();
 
-      //rides before and after the random selected rides
-      Ride previousRide = this.getPreviouRide(indexs[0], firstCarRides);
-      Ride nextRide = this.getNextRide(indexs[1], firstCarRides);
-
-      //second car replacement indexs
-      int[] replacementIndexs = this.findReplacement(previousRide, nextRide, secondCarRides);
-      //invalid replacement
-      if(replacementIndexs[0] > replacementIndexs[1]) {
-        return null;
+      if(firstCarRides.size() > 0 && secondCarRides.size() > 0) {
+        //two random indexs
+        int index1 = (int) (Math.random() * firstCarRides.size());
+        int index2 = (int) (Math.random() * secondCarRides.size());
+        this.swapRides(neighbor, index1, index2);
       }
-      
-      this.swapRides(firstCarRides, secondCarRides, indexs, replacementIndexs);
       //verify second car rides
-      List<Ride> invalidRides = this.invalidRides(secondCarRides);
-      secondCarRides.removeAll(invalidRides);
-      neighbor.getUnassignedRides().addAll(invalidRides);
 
       return neighbor;
     }
 
-    private void swapRides(List<Ride> firstCarRides, List<Ride> secondCarRides, int[] indexs, int[] replacementIndexs) {
-      List<Ride> firstCReplaceRides = firstCarRides.subList(indexs[0], indexs[1]);
-      List<Ride> secondCReplaceRides = secondCarRides.subList(replacementIndexs[0], replacementIndexs[1]);
+    private void swapRides(Solution solution, int index1, int index2) {
+      Ride firstCarRide = solution.getState().get(currI).getAssignedRides().get(index1);
+      Ride secondCarRide = solution.getState().get(currI).getAssignedRides().get(index2);
 
-      //replace first car rides
-      firstCarRides.removeAll(firstCReplaceRides);
-      firstCarRides.addAll(indexs[0], secondCReplaceRides);
-
-      //replace second car rides
-      secondCarRides.removeAll(secondCReplaceRides);
-      secondCarRides.addAll(replacementIndexs[0], firstCReplaceRides);
+      solution.getState().get(currI).getAssignedRides().set(index1, secondCarRide);
+      solution.getState().get(currJ).getAssignedRides().set(index1, firstCarRide);
     }
 
     private List<Ride> invalidRides(List<Ride> secondCarRides) {
