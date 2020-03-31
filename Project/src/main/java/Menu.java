@@ -7,8 +7,14 @@ import common.Problem;
 import common.Solution;
 import common.evaluate_function.PointsEvaluator;
 import common.initial_solution.GreedySolutionGenerator;
+import common.initial_solution.InitialSolutionGenerator;
+import common.initial_solution.RandomSolutionGenerator;
 import common.neighborhood.AssignNeighborhood;
+import common.neighborhood.Neighborhood;
 import common.neighborhood.SwapNeighborhood;
+import genetic_algorithm.GeneticAlgorithm;
+import genetic_algorithm.PopulationGenerator;
+import genetic_algorithm.MutationOperator;
 import hill_climbing.HillClimbing;
 import hill_climbing.SAHillClimbing;
 import model.Car;
@@ -59,9 +65,10 @@ public class Menu {
      *
      * @return algorithm that the user chose
      */
-    private Algorithm<Solution> mainMenu() {
+    private void mainMenu() {
         evaluateFunction = new PointsEvaluator();
-        AssignNeighborhood neighborhood = new AssignNeighborhood();
+        Solution initialSolution = null, optimalSolution = null;
+        Neighborhood<Solution> neighborhood;
 
         System.out.println("========================================================");
         System.out.println("1 - Hill Climbing");
@@ -77,21 +84,78 @@ public class Menu {
 
         switch (myInput.nextInt()) {
             case 1:
-                return new HillClimbing(evaluateFunction, neighborhood);
+                 initialSolution = this.initialSolution().initialSolution(this.problem);
+                 neighborhood = this.neighborhood();
+                optimalSolution = new HillClimbing(evaluateFunction, neighborhood).solve(initialSolution);
+                break;
             case 2:
-                return new SAHillClimbing(evaluateFunction, neighborhood);
+                initialSolution = this.initialSolution().initialSolution(this.problem);
+                neighborhood = this.neighborhood();
+                optimalSolution =new SAHillClimbing(evaluateFunction, neighborhood).solve(initialSolution);
+                break;
             case 3:
-                return new SimulatedAnnealing(evaluateFunction, neighborhood);
+                initialSolution = this.initialSolution().initialSolution(this.problem);
+                neighborhood = this.neighborhood();
+                optimalSolution =new SimulatedAnnealing(evaluateFunction, neighborhood).solve(initialSolution);
+                break;
             case 4:
-                return new TabuSearch(evaluateFunction, neighborhood);
-            /*case 5:
-                return new GeneticAlgorithm(10, nrRides, 0.001, 0.7, 5, 5, 1000);
+                initialSolution = this.initialSolution().initialSolution(this.problem);
+                neighborhood = this.neighborhood();
+                optimalSolution =new TabuSearch(evaluateFunction, neighborhood).solve(initialSolution);
+                break;
+            case 5:
+                MutationOperator mutation = new MutationOperator();
+                PopulationGenerator populationGenerator = new PopulationGenerator(new RandomSolutionGenerator(), 10);
+               optimalSolution = new GeneticAlgorithm(mutation);
+                break;
             default:
-                break;*/
+                break;
+        }
+
+        this.problem.setSolution(optimalSolution);
+
+    }
+
+    private InitialSolutionGenerator<Solution> initialSolution() {
+        System.out.println("========================================================");
+        System.out.println("1 - Random Initial Solution");
+        System.out.println("2 - Greedy Initial Solution");
+        System.out.println("========================================================");
+        System.out.print("Option: ");
+
+        Scanner myInput = new Scanner(System.in);
+
+        switch (myInput.nextInt()) {
+            case 1:
+                return new RandomSolutionGenerator();
+            case 2:
+                return new GreedySolutionGenerator();
+            default:
+                break;
         }
 
         return null;
+    }
 
+    private Neighborhood<Solution> neighborhood() {
+        System.out.println("========================================================");
+        System.out.println("1 - Assign Neighborhood");
+        System.out.println("2 - Swap Neighborhood");
+        System.out.println("========================================================");
+        System.out.print("Option: ");
+
+        Scanner myInput = new Scanner(System.in);
+
+        switch (myInput.nextInt()) {
+            case 1:
+                return new AssignNeighborhood();
+            case 2:
+                return new SwapNeighborhood();
+            default:
+                break;
+        }
+
+        return null;
     }
 
     /**
@@ -199,12 +263,11 @@ public class Menu {
 
             System.out.println("Trying to create a better solution...");
             long startTime = System.nanoTime();
-            algorithm = this.mainMenu();
-            Solution optimalSolution = algorithm.solve(this.problem.getSolution());
+            this.mainMenu();
             long estimatedTime = System.nanoTime() - startTime;
             System.out.println("Execution Time(ms): " + estimatedTime/1000000);
-            System.out.println("Not assigned rides: " + optimalSolution.getUnassignedRides().size());
-            System.out.println("Total Points: " + evaluateFunction.evaluate(optimalSolution));
+            System.out.println("Not assigned rides: " + this.problem.getSolution().getUnassignedRides().size());
+            System.out.println("Total Points: " + evaluateFunction.evaluate(this.problem.getSolution()));
 
             outputFile();
             outputCsv();
