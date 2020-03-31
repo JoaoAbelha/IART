@@ -20,12 +20,11 @@ public class TabuSearch extends Algorithm<Solution> {
 
 	@Override
 	public Solution solve(Solution initialSolution) {
-		int iter = 0;
 		tabuList.clear();
 		Solution globalBest = initialSolution;
-		while (iter < MAX_ITERATIONS) {
+		while (iteration < MAX_ITERATIONS) {
 			int bestValue = evaluateFunction.evaluate(globalBest);
-			System.out.format("iter %d: %d\n", iter, bestValue);
+			System.out.format("iter %d: %d\n", iteration, bestValue);
 			Solution bestNeighbor = null;
 
 			for (Solution neighbor : neighborhood.neighbors(globalBest)) {
@@ -48,7 +47,7 @@ public class TabuSearch extends Algorithm<Solution> {
 			}
 			tabuList.update();
 			values.add(bestValue);
-			iter++;
+			iteration++;
 		}
 
 		return globalBest;
