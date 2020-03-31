@@ -9,6 +9,12 @@ import model.Position;
 import model.Ride;
 
 public class PointsEvaluator implements EvaluateFunction<Solution> {
+  /**
+   * Calculates value for a solution
+   *
+   * @param solution
+   * @return value of the solution
+   */
   @Override
   public int evaluate(Solution solution) {
     if(!solution.isValid())

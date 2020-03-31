@@ -12,12 +12,24 @@ public class TabuSearch extends Algorithm<Solution> {
 	private EvaluateFunction<Solution> evaluateFunction;
 	private Neighborhood<Solution> neighborhood;
 
+	/**
+	 * Tabu Search constructor
+	 *
+	 * @param evaluateFunction
+	 * @param neighborhood
+	 */
 	public TabuSearch(EvaluateFunction<Solution> evaluateFunction, Neighborhood<Solution> neighborhood) {
 		super();
 		this.evaluateFunction = evaluateFunction;
 		this.neighborhood = neighborhood;
 	}
 
+	/**
+	 * Optimizes Solution
+	 *
+	 * @param initialSolution to optimize
+	 * @return optimized solution
+	 */
 	@Override
 	public Solution solve(Solution initialSolution) {
 		tabuList.clear();

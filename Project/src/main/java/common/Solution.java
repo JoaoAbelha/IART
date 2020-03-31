@@ -11,23 +11,43 @@ public class Solution {
   private List<Car> state;
   private List<Ride> unassignedRides;
 
+  /**
+   * Solution constructor
+   *
+   * @param state representing the solution
+   * @param unassigned rides
+   */
   public Solution(List<Car> state, List<Ride> unassigned) {
     this.state = state;
     this.unassignedRides = unassigned;
   }
 
+  /**
+   * @return state from the solution
+   */
   public List<Car> getState() {
     return state;
   }
 
+  /**
+   * Sets state on the solution
+   */
   public void setState(List<Car> state) {
     this.state = state;
   }
 
+  /**
+   * @return unassigned rides
+   */
   public List<Ride> getUnassignedRides() {
     return unassignedRides;
   }
 
+  /**
+   * Checks if the solution is valid
+   *
+   * @return true if yes, false otherwise
+   */
   public boolean isValid() {
     for (Car car : state) {
       List<Ride> rides = car.getAssignedRides();
@@ -55,6 +75,11 @@ public class Solution {
     return true;
   }
 
+  /**
+   * Clones the solution
+   *
+   * @return cloned solution
+   */
   @Override
 	public Solution clone() {
 		List<Car> newState = new ArrayList<>();

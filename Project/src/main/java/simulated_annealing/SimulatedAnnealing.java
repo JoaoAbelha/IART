@@ -15,11 +15,23 @@ public class SimulatedAnnealing extends Algorithm<Solution> {
   private Neighborhood<Solution> neighborhood;
   double coolingRate = 0.001;
 
+  /**
+   * Simulated Annealing constructor
+   *
+   * @param evaluateFunction
+   * @param neighborhood
+   */
   public SimulatedAnnealing(EvaluateFunction<Solution> evaluateFunction, Neighborhood<Solution> neighborhood) {
 		this.evaluateFunction = evaluateFunction;
 		this.neighborhood = neighborhood;
   }
-  
+
+  /**
+   * Optimizes Solution
+   *
+   * @param initialSolution to optimize
+   * @return optimized solution
+   */
   @Override
   public Solution solve(Solution initialSolution) {
     double temperature = TEMPERATURE_INITIAL;

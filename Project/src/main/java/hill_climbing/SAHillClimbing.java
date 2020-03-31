@@ -10,11 +10,23 @@ public class SAHillClimbing extends Algorithm<Solution> {
   private EvaluateFunction<Solution> evaluateFunction;
   private Neighborhood<Solution> neighborhood;
 
+  /**
+   * Steepeset Ascent Hill Climbing constructor
+   *
+   * @param evaluateFunction
+   * @param neighborhood
+   */
   public SAHillClimbing(EvaluateFunction<Solution> evaluateFunction, Neighborhood<Solution> neighborhood) {
     this.evaluateFunction = evaluateFunction;
     this.neighborhood = neighborhood;
   }
 
+  /**
+   * Optimizes Solution
+   *
+   * @param initialSolution to optimize
+   * @return optimized solution
+   */
   @Override
   public Solution solve(Solution initialSolution) {
     Solution globalBest = initialSolution;

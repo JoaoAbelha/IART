@@ -13,6 +13,9 @@ public abstract class Algorithm<T> {
     boolean isRunning = true;
     public int iteration = 0;
 
+    /**
+     * Algorithm Constructor
+     */
     public Algorithm() {
         // Create Chart
         final XYChart chart = QuickChart.getChart("Value per Iteration", "Iteration", "Value", "value", initdata[0], initdata[1]);
@@ -50,6 +53,12 @@ public abstract class Algorithm<T> {
         thread.start();
     }
 
+    /**
+     * Gets values to be displayed on chart
+     *
+     * @param counter max iteration
+     * @return data to be displayed
+     */
     public double[][] getValues(int counter) {
         double[] xData = new double[counter];
         double[] yData = new double[counter];

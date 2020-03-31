@@ -5,11 +5,16 @@ import java.util.*;
 import common.Problem;
 import common.Solution;
 import model.Car;
-import model.Position;
 import model.Ride;
 
 public class RandomSolutionGenerator implements InitialSolutionGenerator<Solution> {
 
+  /**
+   * Generates initial greedy solution for a problem
+   *
+   * @param problem
+   * @return initial solution
+   */
   @Override
   public Solution initialSolution(Problem problem) {
     Collections.sort(problem.getRides(), Comparator.comparingInt(Ride::getEarliestStart));

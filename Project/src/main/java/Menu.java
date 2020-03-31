@@ -54,7 +54,11 @@ public class Menu {
 
     }
 
-    /*TODO: complete the menu*/
+    /**
+     * Lets user chose with algorithm to use
+     *
+     * @return algorithm that the user chose
+     */
     private Algorithm<Solution> mainMenu() {
         evaluateFunction = new PointsEvaluator();
         AssignNeighborhood neighborhood = new AssignNeighborhood();
@@ -90,7 +94,12 @@ public class Menu {
 
     }
 
-    // get file from classpath, resources folder
+    /**
+     * Gets input file with the problem representation
+     *
+     * @param fileName
+     * @return the file
+     */
     private File getFileFromResources(String fileName) {
 
         ClassLoader classLoader = getClass().getClassLoader();
@@ -103,6 +112,11 @@ public class Menu {
 
     }
 
+    /**
+     * Outputs to a file the representation of the solution
+     *
+     * @throws IOException
+     */
     private void outputFile() throws IOException {
         Writer fileWriter = new FileWriter("output.txt", false);
         List<Car> state = problem.getSolution().getState();
@@ -118,6 +132,12 @@ public class Menu {
         fileWriter.close();
     }
 
+    /**
+     * Parses file with the representation of the problem
+     *
+     * @param file
+     * @throws IOException
+     */
     private void parseFile(File file) throws IOException {
 
         if (file == null) return;
@@ -168,8 +188,6 @@ public class Menu {
                 System.exit(1);
             }
 
-            /*todo: validate positions accordingly to the number of rows and columns */
-            /*todo: validate positions accordingly to the number of rows and columns */
             this.problem = new Problem(nrCars, rides, steps, bonus);
             GreedySolutionGenerator initialSolutionGenerator = new GreedySolutionGenerator();
             this.problem.setSolution(initialSolutionGenerator.initialSolution(this.problem));
@@ -193,6 +211,11 @@ public class Menu {
         }
     }
 
+    /**
+     * Outputs data with the value per iteration to a csv file
+     *
+     * @throws IOException
+     */
     private void outputCsv() throws IOException {
         FileWriter csvWriter = new FileWriter("out.csv");
         double[][] values = algorithm.getValues(algorithm.iteration);
