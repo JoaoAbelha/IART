@@ -9,10 +9,10 @@ import java.util.Arrays;
 import java.util.List;
 
 public abstract class Algorithm<T> {
-    protected List<Integer> values = new ArrayList<>();
+    public List<Integer> values = new ArrayList<>();
     double[][] initdata = new double[][]{{1}, {1}};
     boolean isRunning = true;
-    protected int iteration = 0;
+    public int iteration = 0;
 
     public Algorithm() {
         // Create Chart
@@ -51,7 +51,7 @@ public abstract class Algorithm<T> {
         thread.start();*/
     }
 
-    private double[][] getValues(int counter) {
+    public double[][] getValues(int counter) {
         double[] xData = new double[counter];
         double[] yData = new double[counter];
         for (int i = 0; i < counter; i++) {

@@ -27,6 +27,8 @@ public class Menu {
     private int nrRides;
     private int bonus;
     private int steps;
+    private PointsEvaluator evaluateFunction;
+    private Algorithm<Solution> algorithm;
 
     public static void main(String[] args) {
 
@@ -54,7 +56,7 @@ public class Menu {
 
     /*TODO: complete the menu*/
     private Algorithm<Solution> mainMenu() {
-        PointsEvaluator evaluateFunction = new PointsEvaluator();
+        evaluateFunction = new PointsEvaluator();
         AssignNeighborhood neighborhood = new AssignNeighborhood();
 
         System.out.println("========================================================");
@@ -178,10 +180,29 @@ public class Menu {
             System.out.println("Created the problem");
 
             System.out.println("Trying to create a better solution...");
-            Solution optimalSolution = this.mainMenu().solve(this.problem.getSolution());
+            long startTime = System.nanoTime();
+            algorithm = this.mainMenu();
+            Solution optimalSolution = algorithm.solve(this.problem.getSolution());
+            long estimatedTime = System.nanoTime() - startTime;
+            System.out.println("Execution Time(ms): " + estimatedTime/1000000);
             System.out.println("Not assigned rides: " + optimalSolution.getUnassignedRides().size());
-            //System.out.println("Total Points: " + this.problem.evaluate(this.problem.getState()));
+            System.out.println("Total Points: " + evaluateFunction.evaluate(optimalSolution));
+
             outputFile();
+            outputCsv();
         }
+    }
+
+    private void outputCsv() throws IOException {
+        FileWriter csvWriter = new FileWriter("out.csv");
+        double[][] values = algorithm.getValues(algorithm.iteration);
+        for (int i = 0; i < algorithm.iteration; i++) {
+            csvWriter.append(Integer.toString(i));
+            csvWriter.append(",");
+            csvWriter.append(Integer.toString(algorithm.values.get(i)));
+            csvWriter.append("\n");
+        }
+        csvWriter.flush();
+        csvWriter.close();
     }
 }

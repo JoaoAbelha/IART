@@ -24,7 +24,7 @@ public class TabuSearch extends Algorithm<Solution> {
 		Solution globalBest = initialSolution;
 		while (iteration < MAX_ITERATIONS) {
 			int bestValue = evaluateFunction.evaluate(globalBest);
-			System.out.format("iter %d: %d\n", iteration, bestValue);
+			//System.out.format("iter %d: %d\n", iteration, bestValue);
 			Solution bestNeighbor = null;
 
 			for (Solution neighbor : neighborhood.neighbors(globalBest)) {
@@ -48,7 +48,7 @@ public class TabuSearch extends Algorithm<Solution> {
 
 			} else
 				return globalBest;
-			
+
 			tabuList.update();
 			values.add(bestValue);
 			iteration++;
