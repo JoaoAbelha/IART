@@ -46,7 +46,7 @@ public class GeneticAlgorithm extends Algorithm<Solution> {
             evaluatePopulation(this.population);
             // System.out.println("Iteration: " + generationsCounter + "\nTotal Points: " + currentValue + "\n");
             iteration++;
-            values.add(currentValue);
+            //values.add(currentValue);
         }
 
 
@@ -56,13 +56,14 @@ public class GeneticAlgorithm extends Algorithm<Solution> {
         int vehicle = 0;
         for (int i = 0; i < chromosome.length; i += problem.getRides().size()) {
             int[] rides = Arrays.copyOfRange(chromosome, i, i + problem.getRides().size());
-            state[vehicle++] = rides;
+            //state[vehicle++] = rides;
         }
-
+        /*
         if (validState(state))
             System.out.println("valid state: " + evaluate(state));
         else
-            System.out.println("not valid state");
+            System.out.println("not valid state");*/
+        return null;
     }
 
     private void evaluatePopulation(Population population) {

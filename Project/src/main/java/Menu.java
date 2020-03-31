@@ -92,22 +92,26 @@ public class Menu {
                 case 1:
                     initialSolution = this.initialSolution().initialSolution(this.problem);
                     neighborhood = this.neighborhood();
-                    optimalSolution = new HillClimbing(evaluateFunction, neighborhood).solve(initialSolution);
+                    algorithm = new HillClimbing(evaluateFunction, neighborhood);
+                    optimalSolution = algorithm.solve(initialSolution);
                     break;
                 case 2:
                     initialSolution = this.initialSolution().initialSolution(this.problem);
                     neighborhood = this.neighborhood();
-                    optimalSolution =new SAHillClimbing(evaluateFunction, neighborhood).solve(initialSolution);
+                    algorithm = new SAHillClimbing(evaluateFunction, neighborhood);
+                    optimalSolution = algorithm.solve(initialSolution);
                     break;
                 case 3:
                     initialSolution = this.initialSolution().initialSolution(this.problem);
                     neighborhood = this.neighborhood();
-                    optimalSolution =new SimulatedAnnealing(evaluateFunction, neighborhood).solve(initialSolution);
+                    algorithm = new SimulatedAnnealing(evaluateFunction, neighborhood);
+                    optimalSolution = algorithm.solve(initialSolution);
                     break;
                 case 4:
                     initialSolution = this.initialSolution().initialSolution(this.problem);
                     neighborhood = this.neighborhood();
-                    optimalSolution =new TabuSearch(evaluateFunction, neighborhood).solve(initialSolution);
+                    algorithm = new TabuSearch(evaluateFunction, neighborhood);
+                    optimalSolution = algorithm.solve(initialSolution);
                     break;
                 case 5:
                     MutationOperator mutation = new MutationOperator();
@@ -124,6 +128,7 @@ public class Menu {
             }
             break;
         }
+
 
         this.problem.setSolution(optimalSolution);
 
