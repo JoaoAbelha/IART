@@ -185,7 +185,7 @@ public class Menu {
     private File getFileFromResources(String fileName) {
 
         ClassLoader classLoader = getClass().getClassLoader();
-        URL resource = classLoader.getResource("b_should_be_easy.in");
+        URL resource = classLoader.getResource("a_example.in");
         if (resource == null) {
             throw new IllegalArgumentException("file is not found!");
         } else {
@@ -317,8 +317,6 @@ public class Menu {
             }
 
             this.problem = new Problem(nrCars, rides, steps, bonus);
-            GreedySolutionGenerator initialSolutionGenerator = new GreedySolutionGenerator();
-            this.problem.setSolution(initialSolutionGenerator.initialSolution(this.problem));
             System.out.println("Created the problem");
 
             System.out.println("Trying to create a better solution...");
