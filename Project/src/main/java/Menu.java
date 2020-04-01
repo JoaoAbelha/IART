@@ -226,8 +226,8 @@ public class Menu {
 
         for(int i = 0 ; i < state.size()- 1 ; i++) {
             Car car = state.get(i);
-            String carRides = "[";
             for(Ride ride : car.getAssignedRides()) {
+                String carRides = "[";
                 carRides += " " + ride.getStart().getX() + ", " + ride.getStart().getY() +", " + ride.getEnd().getX() + ", " + ride.getEnd().getY();
                 if (bonus.contains(ride.id)) {
                     carRides+= ", 101";

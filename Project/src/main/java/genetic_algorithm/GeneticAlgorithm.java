@@ -14,7 +14,7 @@ import java.util.List;
 public class GeneticAlgorithm extends Algorithm<Solution> {
     public static final double CROSSOVER_RATE = 0.7;
     public static final int ELITISM_COUNT = 5;
-    private final int maxGenerations = 20;
+    private final int maxGenerations = 200;
     private final int populationSize;
     public int currentValue = 0;
 
@@ -155,6 +155,8 @@ public class GeneticAlgorithm extends Algorithm<Solution> {
         }
         if (rideCounter > problem.getAllRides().size())
             return false;
+        System.out.println(rideCounter);
+
         return true;
     }
 }

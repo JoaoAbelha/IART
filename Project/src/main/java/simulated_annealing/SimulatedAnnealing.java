@@ -12,7 +12,7 @@ import common.neighborhood.Neighborhood;
 import common.neighborhood.SwapNeighborhood;
 
 public class SimulatedAnnealing extends Algorithm<Solution> {
-  final double TEMPERATURE_INITIAL = 500000;
+  final double TEMPERATURE_INITIAL = 1000;
   private EvaluateFunction<Solution> evaluateFunction;
   private Neighborhood<Solution> neighborhood;
   private Neighborhood<Solution> neighborhood2;
