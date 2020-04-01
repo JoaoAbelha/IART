@@ -22,8 +22,6 @@ public abstract class Algorithm<T> {
         final SwingWrapper<XYChart> sw = new SwingWrapper<XYChart>(chart);
         sw.displayChart();
 
-
-
         Thread thread = new Thread(){
             public void run(){
                 int counter = 0;

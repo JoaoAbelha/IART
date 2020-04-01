@@ -2,6 +2,8 @@ package genetic_algorithm;
 
 import common.Problem;
 import common.initial_solution.RandomSolutionGenerator;
+import common.Solution;
+import model.Car;
 import model.Position;
 import model.Ride;
 
@@ -33,28 +35,31 @@ public class PopulationGenerator {
     }
 
     private Individual generateValidIndividual(Problem problem) {
-        List<Ride> nonAssignedRides = new ArrayList<>(problem.getRides()); // non assigned rides
-        Random rand = new Random();
         int vehiclesNo = problem.getCars().size();
         int ridesNo = problem.getRides().size();
-        int[][] individualState = new int[vehiclesNo][ridesNo];
+
+        List<Car> state = new ArrayList<>(problem.getCars());
+        List<Ride> nonAssignedRides = new ArrayList<>(problem.getRides()); // non assigned rides
+        Solution solution = new Solution(state, nonAssignedRides);
+
         for (int i = 0; i < ridesNo; i++) {
-            int vehicleID = rand.nextInt(vehiclesNo);
+            int vehicleID = new Random().nextInt(vehiclesNo);
+            Ride ride = problem.getRides().get(i);
 
-            if (individualState[vehicleID][i] == 0) {
-                if (validAssignment(vehicleID, i, problem)) {
-                    individualState[vehicleID][i] = 1;
-                    nonAssignedRides.remove(problem.getRides().get(i));
-
+            if (!(solution.getState().get(vehicleID).getAssignedRides().contains(ride))) {
+                if (validAssignment(solution, vehicleID, ride)) {
+                    solution.getUnassignedRides().remove(ride);
                 }
             }
         }
 
         int[] chromosome = new int[vehiclesNo * ridesNo];
         int counter = 0;
-        for (int i = 0; i < individualState.length; i++) {
-            for (int j = 0; j < individualState[0].length; j++) {
-                chromosome[counter++] = individualState[i][j];
+        for (int i = 0; i < solution.getState().size(); i++) {
+            for (int j = 0; j < problem.getRides().size(); j++) {
+                if(solution.getState().get(i).getAssignedRides().contains(problem.getRides().get(j)))
+                    chromosome[counter++] = 1;
+                else chromosome[counter++] = 0;
             }
         }
         Individual individual = new Individual(chromosome);
@@ -62,57 +67,16 @@ public class PopulationGenerator {
         return individual;
     }
 
-  private boolean validAssignment(int vehicleID, int rideID, Problem problem) {
-    int previousRideID = getPreviousRide(vehicleID, rideID, problem);
-    int nextRideID = getNextRide(vehicleID, rideID);
+    private boolean validAssignment(Solution solution, int vehicleID, Ride unassignedRide) {
+        //try add ride
+        solution.getState().get(vehicleID).getAssignedRides().add(unassignedRide);
 
-    Ride actualRide = problem.getRides().get(rideID);
+        if(!solution.isValid()) {
+            solution.getState().get(vehicleID).getAssignedRides().remove(unassignedRide);
+            return false;
+        }
 
-    if (previousRideID != -1) {
-      Ride previousRide = problem.getRides().get(previousRideID);
-      Position previousPos = previousRide.getEnd();
-      Position currentRideStart = actualRide.getStart();
-
-      int latestStart = actualRide.getLastestFinish() - actualRide.getDistance();
-
-      if (previousPos.getDistanceTo(currentRideStart) > latestStart)
-        return false;
+        return true;
     }
-
-    if (nextRideID != -1) {
-      Ride nextRide = problem.getRides().get(nextRideID);
-      Position currentPos = actualRide.getEnd();
-      Position nextRideStart = nextRide.getStart();
-
-      int latestStart = nextRide.getLastestFinish() - nextRide.getDistance();
-
-      if (currentPos.getDistanceTo(nextRideStart) > latestStart) {
-        return false;
-      }
-    }
-
-    return true;
-  }
-
-  private int getPreviousRide(int vehicleID, int rideID, Problem problem) {
-    //int[] vehicleRides = state[vehicleID];
-    for (int i = rideID; i > 0; i--) {
-     // if (vehicleRides[i] == 1)
-        return i;
-    }
-    return -1;
-  }
-
-  private int getNextRide(int vehicleID, int rideID) {
-        /*
-    int[] vehicleRides = state[vehicleID];
-    for (int i = rideID; i > vehicleRides.length; i++) {
-      if (vehicleRides[i] == 1)
-        return i;
-    }
-    */
-
-    return -1;
-  }
 
 }

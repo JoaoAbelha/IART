@@ -7,6 +7,7 @@ import model.Car;
 import model.Position;
 import model.Ride;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -37,11 +38,12 @@ public class GeneticAlgorithm extends Algorithm<Solution> {
 
     @Override
     public Solution solve(Solution initialSolution) {
+        int currentValue = 0;
         evaluatePopulation(this.population);
         int generationsCounter = 0;
 
         while(!isTerminationConditionMet(generationsCounter++)) {
-            this.population = crossoverOperator.crossoverPopulation(this.population);
+            this.population = crossoverOperator.crossoverPopulation(this.population, currentValue);
             this.population = mutationOperator.mutatePopulation(this.population, populationSize);
             evaluatePopulation(this.population);
             // System.out.println("Iteration: " + generationsCounter + "\nTotal Points: " + currentValue + "\n");
@@ -52,18 +54,25 @@ public class GeneticAlgorithm extends Algorithm<Solution> {
 
         Individual individual = this.population.getFittest(0);
         int[] chromosome = individual.getChromosome();
-
+        int[][] state = new int[problem.getCars().size()][problem.getRides().size()];
         int vehicle = 0;
         for (int i = 0; i < chromosome.length; i += problem.getRides().size()) {
             int[] rides = Arrays.copyOfRange(chromosome, i, i + problem.getRides().size());
             //state[vehicle++] = rides;
         }
-        /*
-        if (validState(state))
-            System.out.println("valid state: " + evaluate(state));
-        else
-            System.out.println("not valid state");*/
-        return null;
+
+        List<Car> cars = problem.getCars();
+        for(int i = 0; i < problem.getCars().size(); ++i) {
+            List<Ride> rides = new ArrayList<>();
+            for(int j = 0; j < problem.getRides().size(); ++j) {
+                if(state[i][j] == 1) {
+                    rides.add(problem.getRides().get(j));
+                }
+            }
+            cars.get(i).setAssignedRides(rides);
+        }
+
+        return new Solution(cars);
     }
 
     private void evaluatePopulation(Population population) {

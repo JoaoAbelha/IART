@@ -33,7 +33,7 @@ public class CrossoverOperator {
      * @return The new population
      */
 
-    public Population crossoverPopulation(Population population){
+    public Population crossoverPopulation(Population population, int currentValue){
         // Create new population
         Population newPopulation = new Population(population.size());
 
@@ -41,6 +41,8 @@ public class CrossoverOperator {
         for (int populationIndex = 0; populationIndex < population.size(); populationIndex++) {
             // Get parent1
             Individual parent1 = population.getFittest(populationIndex);
+            if (populationIndex == 0)
+                currentValue = parent1.getFitness();
 
             // Apply crossover to the individual if it is not Elite
             if (GeneticAlgorithm.CROSSOVER_RATE > Math.random() && populationIndex >= GeneticAlgorithm.ELITISM_COUNT) {
