@@ -57,8 +57,9 @@ public class SwapNeighborhood implements Neighborhood<Solution> {
 
       if(firstCarRides.size() > 0 && secondCarRides.size() > 0) {
         //two random indexs
-        int index1 = (int) (Math.random() * firstCarRides.size());
-        int index2 = (int) (Math.random() * secondCarRides.size());
+        int index1 = (int) (Math.random() * (firstCarRides.size() - 1));
+        int index2 = (int) (Math.random() * (secondCarRides.size() - 1));
+        System.out.println("size = " + secondCarRides.size());
         this.swapRides(neighbor, index1, index2);
       }
       //verify second car rides
@@ -67,6 +68,7 @@ public class SwapNeighborhood implements Neighborhood<Solution> {
     }
 
     private void swapRides(Solution solution, int index1, int index2) {
+      System.out.println(index2);
       Ride firstCarRide = solution.getState().get(currI).getAssignedRides().get(index1);
       Ride secondCarRide = solution.getState().get(currI).getAssignedRides().get(index2);
 

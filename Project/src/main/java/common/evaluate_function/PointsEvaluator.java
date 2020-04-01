@@ -1,5 +1,6 @@
 package common.evaluate_function;
 
+import java.util.HashSet;
 import java.util.List;
 
 import common.Problem;

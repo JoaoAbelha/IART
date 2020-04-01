@@ -236,9 +236,9 @@ public class Menu {
                     carRides+=", 1";
                 }
 
+                fileWriter.write(carRides);
+                fileWriter.write("],");
             }
-            fileWriter.write(carRides);
-            fileWriter.write("],");
         }
 
         Car car = state.get(state.size()-1);
@@ -335,6 +335,7 @@ public class Menu {
 
             outputFile();
             outputCsv();
+            outputJSON();
         }
     }
 

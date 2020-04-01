@@ -4,11 +4,13 @@ import common.Algorithm;
 import common.Solution;
 import common.evaluate_function.EvaluateFunction;
 import common.neighborhood.Neighborhood;
+import common.neighborhood.SwapNeighborhood;
 
 public class HillClimbing extends Algorithm<Solution> {
   final private int MAX_ITERATIONS = 100000;
   private EvaluateFunction<Solution> evaluateFunction;
   private Neighborhood<Solution> neighborhood;
+  private Neighborhood<Solution> neighborhood2;
 
   /**
    * Hill Climbing constructor
@@ -20,6 +22,7 @@ public class HillClimbing extends Algorithm<Solution> {
     super();
     this.evaluateFunction = evaluateFunction;
     this.neighborhood = neighborhood;
+    neighborhood2 = new SwapNeighborhood();
   }
 
   /**
@@ -34,9 +37,9 @@ public class HillClimbing extends Algorithm<Solution> {
     values.add(evaluateFunction.evaluate(globalBest));
     while (iteration < MAX_ITERATIONS) {
       int bestValue = evaluateFunction.evaluate(globalBest);
-      System.out.println("-----------------------------------------------------------");
-      System.out.format("iter %d: %d\n", iteration, evaluateFunction.evaluate(globalBest));
-      System.out.println("-----------------------------------------------------------");
+      //System.out.println("-----------------------------------------------------------");
+      //System.out.format("iter %d: %d\n", iteration, evaluateFunction.evaluate(globalBest));
+      //System.out.println("-----------------------------------------------------------");
       int counter = 0;
       for (Solution neighbor : neighborhood.neighbors(globalBest)) {
         if(neighbor != null) {
@@ -49,6 +52,22 @@ public class HillClimbing extends Algorithm<Solution> {
           }
         }
       }
+
+      if (counter == 0) {
+        for (Solution neighbor : neighborhood2.neighbors(globalBest)) {
+          if(neighbor != null) {
+            int neighborValue = evaluateFunction.evaluate(neighbor);
+            if(neighborValue > bestValue) {
+              globalBest = neighbor;
+              bestValue = neighborValue;
+              counter++;
+              break;
+            }
+          }
+        }
+      }
+
+
       if (counter == 0)
         return globalBest;
 
