@@ -60,21 +60,22 @@ public class GeneticAlgorithm extends Algorithm<Solution> {
         int vehicle = 0;
         for (int i = 0; i < chromosome.length; i += problem.getRides().size()) {
             int[] rides = Arrays.copyOfRange(chromosome, i, i + problem.getRides().size());
-            //state[vehicle++] = rides;
+            state[vehicle++] = rides;
         }
 
         List<Car> cars = problem.getCars();
+        List<Ride> unassigndeRide = problem.getRides();
         for(int i = 0; i < problem.getCars().size(); ++i) {
             List<Ride> rides = new ArrayList<>();
             for(int j = 0; j < problem.getRides().size(); ++j) {
                 if(state[i][j] == 1) {
                     rides.add(problem.getRides().get(j));
+                    unassigndeRide.remove(problem.getRides().get(j));
                 }
             }
             cars.get(i).setAssignedRides(rides);
         }
-
-        return new Solution(cars);
+        return new Solution(cars, unassigndeRide);
     }
 
     private void evaluatePopulation(Population population) {

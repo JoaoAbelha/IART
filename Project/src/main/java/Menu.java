@@ -57,9 +57,6 @@ public class Menu {
             System.out.println("Error while reading the file");
             e.printStackTrace();
         }
-
-
-
     }
 
     private void printMenu() {

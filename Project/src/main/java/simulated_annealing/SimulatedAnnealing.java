@@ -63,6 +63,7 @@ public class SimulatedAnnealing extends Algorithm<Solution> {
               globalSolution = neighborSolution;
             }
           }
+          break;
         }
       }
 
