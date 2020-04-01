@@ -184,7 +184,7 @@ public class Menu {
     private File getFileFromResources(String fileName) {
 
         ClassLoader classLoader = getClass().getClassLoader();
-        URL resource = classLoader.getResource("a_easy.in");
+        URL resource = classLoader.getResource("b_should_be_easy.in");
         if (resource == null) {
             throw new IllegalArgumentException("file is not found!");
         } else {

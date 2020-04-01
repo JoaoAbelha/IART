@@ -38,9 +38,6 @@ public class SwapNeighborhood implements Neighborhood<Solution> {
     @Override
     public Solution next() {
       Solution neighbor = solution.clone();
-      List<Ride> firstCarRides = neighbor.getState().get(currI).getAssignedRides();
-      List<Ride> secondCarRides = neighbor.getState().get(currJ).getAssignedRides();
-
       //update neighborhood index
       if (currJ + 1 > solution.getState().size() - 1) {
         currI++;
@@ -55,11 +52,17 @@ public class SwapNeighborhood implements Neighborhood<Solution> {
         currJ++;
       }
 
+      List<Ride> firstCarRides = neighbor.getState().get(currI).getAssignedRides();
+      List<Ride> secondCarRides = neighbor.getState().get(currJ).getAssignedRides();
+
+
+
       if(firstCarRides.size() > 0 && secondCarRides.size() > 0) {
         //two random indexs
         int index1 = (int) (Math.random() * (firstCarRides.size() - 1));
         int index2 = (int) (Math.random() * (secondCarRides.size() - 1));
-        System.out.println("size = " + secondCarRides.size());
+        System.out.println("size = " + firstCarRides.size());
+        System.out.println("real size = " + solution.getState().get(currI).getAssignedRides().size());
         this.swapRides(neighbor, index1, index2);
       }
       //verify second car rides
@@ -72,8 +75,8 @@ public class SwapNeighborhood implements Neighborhood<Solution> {
       Ride firstCarRide = solution.getState().get(currI).getAssignedRides().get(index1);
       Ride secondCarRide = solution.getState().get(currJ).getAssignedRides().get(index2);
 
-      solution.getState().get(currI).getAssignedRides().set(index2, secondCarRide);
-      solution.getState().get(currJ).getAssignedRides().set(index1, firstCarRide);
+      solution.getState().get(currI).getAssignedRides().set(index1, secondCarRide);
+      solution.getState().get(currJ).getAssignedRides().set(index2, firstCarRide);
     }
 
     private List<Ride> invalidRides(List<Ride> secondCarRides) {
