@@ -41,7 +41,7 @@ public class Menu {
     public static void main(String[] args) {
 
         if (args.length != 1) {
-            System.out.println("Usage java Menu <file in the resources> ");
+            System.out.println("Usage java Menu <file> ");
             exit(errorStatus);
         }
 
