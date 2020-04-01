@@ -14,8 +14,9 @@ import java.util.List;
 public class GeneticAlgorithm extends Algorithm<Solution> {
     public static final double CROSSOVER_RATE = 0.7;
     public static final int ELITISM_COUNT = 5;
-    private final int maxGenerations = 1000;
+    private final int maxGenerations = 10000;
     private final int populationSize;
+    public int currentValue = 0;
 
     private Population population;
     private Problem problem;
@@ -38,12 +39,13 @@ public class GeneticAlgorithm extends Algorithm<Solution> {
 
     @Override
     public Solution solve(Solution initialSolution) {
-        int currentValue = 0;
         evaluatePopulation(this.population);
         int generationsCounter = 0;
 
         while(!isTerminationConditionMet(generationsCounter++)) {
-            this.population = crossoverOperator.crossoverPopulation(this.population, currentValue);
+            Object[] temp = crossoverOperator.crossoverPopulation(this.population);
+            this.population = (Population) temp[0];
+            this.currentValue = (Integer) temp[1];
             this.population = mutationOperator.mutatePopulation(this.population, populationSize);
             evaluatePopulation(this.population);
             System.out.println("Iteration: " + generationsCounter + "\nTotal Points: " + currentValue + "\n");

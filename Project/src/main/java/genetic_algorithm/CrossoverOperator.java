@@ -2,6 +2,7 @@ package genetic_algorithm;
 
 import java.util.Arrays;
 
+
 public class CrossoverOperator {
     private final int TOURNAMENT_SIZE = 5;
 
@@ -30,19 +31,21 @@ public class CrossoverOperator {
      * Crossover population
      *
      * @param population
-     * @return The new population
+     * @return The new population and best value
      */
 
-    public Population crossoverPopulation(Population population, int currentValue){
+    public Object[] crossoverPopulation(Population population){
         // Create new population
         Population newPopulation = new Population(population.size());
+        Integer bestValue = null;
 
         // Loop over current population by fitness
         for (int populationIndex = 0; populationIndex < population.size(); populationIndex++) {
             // Get parent1
             Individual parent1 = population.getFittest(populationIndex);
-            if (populationIndex == 0)
-                currentValue = parent1.getFitness();
+            if (populationIndex == 0) {
+                bestValue = parent1.getFitness();
+            }
 
             // Apply crossover to the individual if it is not Elite
             if (GeneticAlgorithm.CROSSOVER_RATE > Math.random() && populationIndex >= GeneticAlgorithm.ELITISM_COUNT) {
@@ -79,6 +82,6 @@ public class CrossoverOperator {
                 newPopulation.setIndividual(populationIndex, parent1);
             }
         }
-        return newPopulation;
+        return new Object[]{newPopulation, bestValue};
     }
 }
