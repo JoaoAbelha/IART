@@ -14,7 +14,7 @@ import java.util.List;
 public class GeneticAlgorithm extends Algorithm<Solution> {
     public static final double CROSSOVER_RATE = 0.7;
     public static final int ELITISM_COUNT = 5;
-    private final int maxGenerations = 1000;
+    private final int maxGenerations = 20;
     private final int populationSize;
     public int currentValue = 0;
 
@@ -134,10 +134,12 @@ public class GeneticAlgorithm extends Algorithm<Solution> {
     }
 
     protected boolean validState(int[][] state) {
+        int rideCounter = 0;
         for (int[] vehicleRides : state) {
             int[] rides = Arrays.stream(vehicleRides).filter(ride -> ride == 1).toArray();
             int time = 0;
             for (int i = 0; i < rides.length - 1; i++) {
+                rideCounter++;
                 Ride actualRide = problem.getRides().get(rides[i]);
                 Ride nextRide = problem.getRides().get(rides[i + 1]);
                 Position currentPos = actualRide.getEnd();
@@ -151,6 +153,8 @@ public class GeneticAlgorithm extends Algorithm<Solution> {
                 }
             }
         }
+        if (rideCounter > problem.getAllRides().size())
+            return false;
         return true;
     }
 }

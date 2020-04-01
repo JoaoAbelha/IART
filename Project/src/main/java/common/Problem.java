@@ -11,6 +11,7 @@ public class Problem {
   private int steps;
   private List<Car> cars = new ArrayList<>();
   private List<Ride> rides; // non assigned rides
+  private List<Ride> allRides;
   public static int perRideBonus;
   private Solution solution;
 
@@ -29,13 +30,25 @@ public class Problem {
 
     this.steps = steps;
     Problem.perRideBonus = bonus;
+    this.allRides = new ArrayList<>(rides);
     this.rides = new ArrayList<>(rides);
   }
 
   /**
-   * @return rides from the problem
+   * Gets all non assigned rides
+   *
+   * @return rides
    */
   public List<Ride> getRides() {
+    return this.rides;
+  }
+
+  /**
+   * Gets all rides
+   *
+   * @return rides
+   */
+  public List<Ride> getAllRides() {
     return this.rides;
   }
 

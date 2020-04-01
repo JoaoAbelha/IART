@@ -111,8 +111,8 @@ public class Menu {
                     optimalSolution = algorithm.solve(initialSolution);
                     break;
                 case 5:
-                    PopulationGenerator populationGenerator = new PopulationGenerator(10);
-                    GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm(10, this.problem);
+                    PopulationGenerator populationGenerator = new PopulationGenerator(100);
+                    GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm(100, this.problem);
                     algorithm = geneticAlgorithm;
                     geneticAlgorithm.setPopulation(populationGenerator.generate(this.problem));
                     optimalSolution = geneticAlgorithm.solve(this.problem.getSolution());
@@ -185,7 +185,7 @@ public class Menu {
     private File getFileFromResources(String fileName) {
 
         ClassLoader classLoader = getClass().getClassLoader();
-        URL resource = classLoader.getResource("a_example.in");
+        URL resource = classLoader.getResource("b_should_be_easy.in");
         if (resource == null) {
             throw new IllegalArgumentException("file is not found!");
         } else {
@@ -324,9 +324,10 @@ public class Menu {
             this.mainMenu();
             long estimatedTime = System.nanoTime() - startTime;
             System.out.println("Execution Time(ms): " + estimatedTime/1000000);
-            if (this.problem.getSolution().getUnassignedRides() != null)
+            if (algorithm.getClass() != GeneticAlgorithm.class) {
                 System.out.println("Not assigned rides: " + this.problem.getSolution().getUnassignedRides().size());
-            System.out.println("Total Points: " + evaluateFunction.evaluate(this.problem.getSolution()));
+                System.out.println("Total Points: " + evaluateFunction.evaluate(this.problem.getSolution()));
+            }
 
             outputFile();
             outputCsv();
