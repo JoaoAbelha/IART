@@ -14,6 +14,11 @@ import model.Position;
 import model.Ride;
 
 public class AssignNeighborhood implements Neighborhood<Solution> {
+    /**
+     * solution neighborhood
+     * @param solution
+     * @return
+     */
     @Override
     public Iterable<Solution> neighbors(Solution solution) {
         return new IterableNeighborhood(solution);
@@ -77,41 +82,6 @@ public class AssignNeighborhood implements Neighborhood<Solution> {
             } else {
                 car.getAssignedRides().remove(unassignedRide);
             }
-        }
-
-
-
-        private int[] getBestReplacement(List<Ride> assignedRides, Ride ride) {
-            int indexs[] = {0, assignedRides.size() - 1};
-            int time = 0, i = 0;
-
-            for (; i < assignedRides.size() - 1; ++i) {
-                Ride r = assignedRides.get(i);
-                Position ridePos = r.getEnd();
-                Position nextRidePos = ride.getStart();
-
-                time += r.getDistance() + ridePos.getDistanceTo(nextRidePos);
-                int latestStart = ride.getLastestFinish() - ride.getDistance();
-
-                if (time > latestStart) {
-                  break;
-                } else indexs[0] = i;
-            }
-
-            for (; i < assignedRides.size() - 1; ++i) {
-              Ride nextRide = assignedRides.get(i + 1);
-              Position ridePos = ride.getEnd();
-              Position nextRidePos = nextRide.getStart();
-
-              time += ride.getDistance() + ridePos.getDistanceTo(nextRidePos);
-              int latestStart = ride.getLastestFinish() - ride.getDistance();
-
-              if (time > latestStart) {
-                indexs[1] = i;
-              } else break;
-            }
-
-            return indexs;
         }
     }
 

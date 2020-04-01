@@ -10,6 +10,11 @@ import model.Ride;
 import model.Position;
 
 public class SwapNeighborhood implements Neighborhood<Solution> {
+  /**
+   * solution neighborhood
+   * @param solution
+   * @return
+   */
   @Override
   public Iterable<Solution> neighbors(Solution solution) {
     return new IterableNeighborhood(solution);

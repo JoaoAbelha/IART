@@ -11,6 +11,12 @@ import model.Ride;
 public class MutationOperator {
     private final double MUTATION_RATE = 0.001;
 
+    /**
+     * mutate the population
+     * @param population
+     * @param populationSize
+     * @return
+     */
     public Population mutatePopulation(Population population, int populationSize) {
         // Initialize new population
         Population newPopulation = new Population(populationSize);

@@ -54,7 +54,7 @@ public class TabuSearch extends Algorithm<Solution> {
 							&& evaluateFunction.evaluate(neighbor) > evaluateFunction.evaluate(bestNeighbor)) {
 						bestNeighbor = neighbor;
 					}
-				} else System.out.println("contains");
+				}
 			}
 
 			if (bestNeighbor == null && neighborhood2 != null) {
@@ -66,7 +66,7 @@ public class TabuSearch extends Algorithm<Solution> {
 								&& evaluateFunction.evaluate(neighbor) > evaluateFunction.evaluate(bestNeighbor)) {
 							bestNeighbor = neighbor;
 						}
-					} else System.out.println("contains");
+					}
 				}
 			}
 			if (bestNeighbor != null) {

@@ -23,20 +23,40 @@ public class GeneticAlgorithm extends Algorithm<Solution> {
     private CrossoverOperator crossoverOperator = new CrossoverOperator();
     private MutationOperator mutationOperator = new MutationOperator();
 
+    /**
+     * GeneticAlgorithm constructor
+     * @param populationSize
+     * @param problem
+     */
     public GeneticAlgorithm(int populationSize, Problem problem) {
         super();
         this.populationSize = populationSize;
         this.problem = problem;
     }
 
+    /**
+     * set the population
+     * @param population
+     */
     public void setPopulation(Population population) {
         this.population = population;
     }
 
+    /**
+     * check terminal condition
+     * @param generationsCount
+     * @return
+     */
     public boolean isTerminationConditionMet(int generationsCount) {
         return (generationsCount >= this.maxGenerations);
     }
 
+    /**
+     * Optimizes Solution
+     *
+     * @param initialSolution to optimize
+     * @return optimized solution
+     */
     @Override
     public Solution solve(Solution initialSolution) {
         evaluatePopulation(this.population);
@@ -48,7 +68,6 @@ public class GeneticAlgorithm extends Algorithm<Solution> {
             this.currentValue = (Integer) temp[1];
             this.population = mutationOperator.mutatePopulation(this.population, populationSize);
             evaluatePopulation(this.population);
-            System.out.println("Iteration: " + generationsCounter + "\nTotal Points: " + currentValue + "\n");
             iteration++;
             values.add(currentValue);
         }
@@ -78,6 +97,10 @@ public class GeneticAlgorithm extends Algorithm<Solution> {
         return new Solution(cars, unassigndeRide);
     }
 
+    /**
+     * evaluates current population
+     * @param population
+     */
     private void evaluatePopulation(Population population) {
         Individual[] individuals = population.getIndividuals();
 
@@ -100,6 +123,11 @@ public class GeneticAlgorithm extends Algorithm<Solution> {
         }
     }
 
+    /**
+     * evaluate a individual state
+     * @param state
+     * @return
+     */
     private int evaluate(int[][] state) {
         int points = 0;
         Ride ride = problem.getRides().get(0);
@@ -133,6 +161,11 @@ public class GeneticAlgorithm extends Algorithm<Solution> {
         return points;
     }
 
+    /**
+     * validate individual state
+     * @param state
+     * @return
+     */
     protected boolean validState(int[][] state) {
         int rideCounter = 0;
         for (int[] vehicleRides : state) {

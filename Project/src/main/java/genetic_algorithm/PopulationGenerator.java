@@ -14,10 +14,19 @@ import java.util.Random;
 public class PopulationGenerator {
     private int populationSize;
 
+    /**
+     * PopulationGenerator constructor
+     * @param populationSize
+     */
     public PopulationGenerator(int populationSize) {
         this.populationSize = populationSize;
     }
 
+    /**
+     * generate initial population
+     * @param problem
+     * @return
+     */
     public Population generate(Problem problem) {
         //Generate random valid solutions
 
@@ -34,6 +43,11 @@ public class PopulationGenerator {
         return population;
     }
 
+    /**
+     * generate a valid individual for the initial population
+     * @param problem
+     * @return
+     */
     private Individual generateValidIndividual(Problem problem) {
         int vehiclesNo = problem.getCars().size();
         int ridesNo = problem.getRides().size();
@@ -67,6 +81,13 @@ public class PopulationGenerator {
         return individual;
     }
 
+    /**
+     * verify possible ride assignment
+     * @param solution
+     * @param vehicleID
+     * @param unassignedRide
+     * @return
+     */
     private boolean validAssignment(Solution solution, int vehicleID, Ride unassignedRide) {
         //try add ride
         solution.getState().get(vehicleID).getAssignedRides().add(unassignedRide);

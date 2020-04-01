@@ -17,7 +17,6 @@ public abstract class Algorithm<T> {
      * Algorithm Constructor
      */
     public Algorithm() {
-
         // Create Chart
         final XYChart chart = QuickChart.getChart("Value per Iteration", "Iteration", "Value", "value", initdata[0], initdata[1]);
         final SwingWrapper<XYChart> sw = new SwingWrapper<XYChart>(chart);
