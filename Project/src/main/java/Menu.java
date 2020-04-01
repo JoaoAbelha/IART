@@ -158,6 +158,7 @@ public class Menu {
         System.out.println("========================================================");
         System.out.println("1 - Assign Neighborhood");
         System.out.println("2 - Swap Neighborhood");
+        System.out.println("3 - Combine");
         System.out.println("========================================================");
         System.out.print("Option: ");
 
@@ -168,6 +169,8 @@ public class Menu {
                 return new AssignNeighborhood();
             case 2:
                 return new SwapNeighborhood();
+            case 3:
+                return null;
             default:
                 break;
         }
