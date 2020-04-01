@@ -116,6 +116,7 @@ public class Menu {
                 case 5:
                     PopulationGenerator populationGenerator = new PopulationGenerator(10);
                     GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm(10, this.problem);
+                    algorithm = geneticAlgorithm;
                     geneticAlgorithm.setPopulation(populationGenerator.generate(this.problem));
                     optimalSolution = geneticAlgorithm.solve(this.problem.getSolution());
                     break;
@@ -328,7 +329,8 @@ public class Menu {
             this.mainMenu();
             long estimatedTime = System.nanoTime() - startTime;
             System.out.println("Execution Time(ms): " + estimatedTime/1000000);
-            System.out.println("Not assigned rides: " + this.problem.getSolution().getUnassignedRides().size());
+            if (this.problem.getSolution().getUnassignedRides() != null)
+                System.out.println("Not assigned rides: " + this.problem.getSolution().getUnassignedRides().size());
             System.out.println("Total Points: " + evaluateFunction.evaluate(this.problem.getSolution()));
 
             outputFile();
@@ -344,7 +346,6 @@ public class Menu {
      */
     private void outputCsv() throws IOException {
         FileWriter csvWriter = new FileWriter("out.csv");
-        double[][] values = algorithm.getValues(algorithm.iteration);
         for (int i = 0; i < algorithm.iteration; i++) {
             csvWriter.append(Integer.toString(i));
             csvWriter.append(",");

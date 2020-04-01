@@ -14,7 +14,7 @@ import java.util.List;
 public class GeneticAlgorithm extends Algorithm<Solution> {
     public static final double CROSSOVER_RATE = 0.7;
     public static final int ELITISM_COUNT = 5;
-    private final int maxGenerations = 10000;
+    private final int maxGenerations = 1000;
     private final int populationSize;
     public int currentValue = 0;
 
