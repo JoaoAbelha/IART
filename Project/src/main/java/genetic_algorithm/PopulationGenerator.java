@@ -14,7 +14,7 @@ import java.util.Random;
 public class PopulationGenerator {
     private int populationSize;
 
-    public PopulationGenerator(RandomSolutionGenerator randomSolutionGenerator, int populationSize) {
+    public PopulationGenerator(int populationSize) {
         this.populationSize = populationSize;
     }
 

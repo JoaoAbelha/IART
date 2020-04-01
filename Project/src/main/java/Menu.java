@@ -128,6 +128,7 @@ public class Menu {
                     continue;
             }
             break;
+        }
 
         this.problem.setSolution(optimalSolution);
     }

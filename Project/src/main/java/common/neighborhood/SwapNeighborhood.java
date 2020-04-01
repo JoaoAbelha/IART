@@ -70,9 +70,9 @@ public class SwapNeighborhood implements Neighborhood<Solution> {
     private void swapRides(Solution solution, int index1, int index2) {
       System.out.println(index2);
       Ride firstCarRide = solution.getState().get(currI).getAssignedRides().get(index1);
-      Ride secondCarRide = solution.getState().get(currI).getAssignedRides().get(index2);
+      Ride secondCarRide = solution.getState().get(currJ).getAssignedRides().get(index2);
 
-      solution.getState().get(currI).getAssignedRides().set(index1, secondCarRide);
+      solution.getState().get(currI).getAssignedRides().set(index2, secondCarRide);
       solution.getState().get(currJ).getAssignedRides().set(index1, firstCarRide);
     }
 

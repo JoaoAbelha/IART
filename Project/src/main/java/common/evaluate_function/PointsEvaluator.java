@@ -55,7 +55,7 @@ public class PointsEvaluator implements EvaluateFunction<Solution> {
   /**
    * Given a list of cars calculates which rides have bonus
    *
-   * @param list of cars
+   * @param cars of cars
    * @return the ID of rides with bonus
    */
   public static HashSet<Integer> getRideWithBonus(List<Car> cars) {
