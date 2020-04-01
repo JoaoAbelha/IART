@@ -22,6 +22,10 @@ public class Solution {
     this.unassignedRides = unassigned;
   }
 
+  public Solution(List<Car> state) {
+    this.state = state;
+  }
+
   /**
    * @return state from the solution
    */

@@ -22,6 +22,10 @@ public class Car {
         this.busyUntil = busyUntil;
     }
 
+    public void setAssignedRides(List<Ride> assignedRides) {
+            this.assignedRides = assignedRides;
+    }
+
     public List<Ride> getAssignedRides() {
         return this.assignedRides;
     }

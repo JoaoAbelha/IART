@@ -38,16 +38,9 @@ public class SimulatedAnnealing extends Algorithm<Solution> {
     Solution globalBest = initialSolution;
     
     while (temperature > 1) {
-      List<Solution> neighborhoodList = new ArrayList<>();
       int globalSolution = evaluateFunction.evaluate(globalBest);
       
       for (Solution neighbor : neighborhood.neighbors(globalBest)) {
-        neighborhoodList.add(neighbor);
-      }
-
-      if (neighborhoodList.size() > 0) {
-        int random = new Random().nextInt(neighborhoodList.size());
-        Solution neighbor = neighborhoodList.get(random);
         if(neighbor != null) {
           int neighborSolution = evaluateFunction.evaluate(neighbor);
           if(neighborSolution > globalSolution) {

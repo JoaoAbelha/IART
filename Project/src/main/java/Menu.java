@@ -114,9 +114,10 @@ public class Menu {
                     optimalSolution = algorithm.solve(initialSolution);
                     break;
                 case 5:
-                    MutationOperator mutation = new MutationOperator();
-                    // PopulationGenerator populationGenerator = new PopulationGenerator(new RandomSolutionGenerator(), 10);
-                    // optimalSolution = new GeneticAlgorithm(mutation);
+                    PopulationGenerator populationGenerator = new PopulationGenerator(10);
+                    GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm(10, this.problem);
+                    geneticAlgorithm.setPopulation(populationGenerator.generate(this.problem));
+                    optimalSolution = geneticAlgorithm.solve(this.problem.getSolution());
                     break;
                 case 0:
                     System.out.println("Goodbye!\n\n");
@@ -127,11 +128,8 @@ public class Menu {
                     continue;
             }
             break;
-        }
-
 
         this.problem.setSolution(optimalSolution);
-
     }
 
     private InitialSolutionGenerator<Solution> initialSolution() {
@@ -185,7 +183,7 @@ public class Menu {
     private File getFileFromResources(String fileName) {
 
         ClassLoader classLoader = getClass().getClassLoader();
-        URL resource = classLoader.getResource("b_should_be_easy.in");
+        URL resource = classLoader.getResource("a_easy.in");
         if (resource == null) {
             throw new IllegalArgumentException("file is not found!");
         } else {
@@ -319,10 +317,6 @@ public class Menu {
             this.problem = new Problem(nrCars, rides, steps, bonus);
             GreedySolutionGenerator initialSolutionGenerator = new GreedySolutionGenerator();
             this.problem.setSolution(initialSolutionGenerator.initialSolution(this.problem));
-            System.out.println(this.problem.getSolution().getState().size());
-            for(Car car : this.problem.getSolution().getState()) {
-                System.out.println(car.getAssignedRides().size());
-            }
             System.out.println("Created the problem");
 
             System.out.println("Trying to create a better solution...");
